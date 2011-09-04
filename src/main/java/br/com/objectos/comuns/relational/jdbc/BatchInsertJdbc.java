@@ -23,7 +23,7 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.objectos.comuns.relational.Insercao;
+import br.com.objectos.comuns.relational.BatchInsert;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
@@ -33,7 +33,7 @@ import com.google.inject.Provider;
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class BatchInsertJdbc implements Insercao {
+class BatchInsertJdbc implements BatchInsert {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -44,15 +44,15 @@ class BatchInsertJdbc implements Insercao {
   }
 
   @Override
-  public void de(Object entity) {
+  public void of(Object entity) {
   }
 
   @Override
-  public void deTodos(Iterable<?> entities) {
+  public void allOf(Iterable<?> entities) {
   }
 
   @Override
-  public void deTodos(Iterator<?> entities) {
+  public void allOf(Iterator<?> entities) {
     Connection conn = null;
 
     try {

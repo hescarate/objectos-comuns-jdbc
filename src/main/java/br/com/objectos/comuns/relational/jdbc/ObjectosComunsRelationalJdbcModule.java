@@ -18,7 +18,7 @@ package br.com.objectos.comuns.relational.jdbc;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import br.com.objectos.comuns.relational.Insercao;
+import br.com.objectos.comuns.relational.BatchInsert;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
@@ -40,7 +40,7 @@ public class ObjectosComunsRelationalJdbcModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    bind(Insercao.class).to(BatchInsertJdbc.class).in(Scopes.SINGLETON);
+    bind(BatchInsert.class).to(BatchInsertJdbc.class).in(Scopes.SINGLETON);
   }
 
   @Provides
