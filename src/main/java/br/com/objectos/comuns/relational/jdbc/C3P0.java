@@ -15,28 +15,21 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.sql.Connection;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import br.com.objectos.comuns.relational.BatchInsert;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
-import com.google.inject.throwingproviders.ThrowingProviderBinder;
+import com.google.inject.BindingAnnotation;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-abstract class ObjectosComunsRelationalJdbcModule extends AbstractModule {
-
-  @Override
-  protected void configure() {
-    bind(BatchInsert.class).to(BatchInsertJdbc.class).in(Scopes.SINGLETON);
-
-    ThrowingProviderBinder.create(binder()) //
-        .bind(SQLProvider.class, Connection.class) //
-        .to(getConnectionProvider());
-  }
-
-  protected abstract Class<? extends SQLProvider<Connection>> getConnectionProvider();
-
-}
+@BindingAnnotation
+@Retention(RetentionPolicy.RUNTIME)
+@Target({
+    ElementType.FIELD, //
+    ElementType.METHOD, //
+    ElementType.PARAMETER //
+})
+public @interface C3P0 {}

@@ -15,28 +15,16 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.sql.Connection;
+import java.sql.SQLException;
 
-import br.com.objectos.comuns.relational.BatchInsert;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
-import com.google.inject.throwingproviders.ThrowingProviderBinder;
+import com.google.inject.throwingproviders.CheckedProvider;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-abstract class ObjectosComunsRelationalJdbcModule extends AbstractModule {
+public interface SQLProvider<T> extends CheckedProvider<T> {
 
   @Override
-  protected void configure() {
-    bind(BatchInsert.class).to(BatchInsertJdbc.class).in(Scopes.SINGLETON);
-
-    ThrowingProviderBinder.create(binder()) //
-        .bind(SQLProvider.class, Connection.class) //
-        .to(getConnectionProvider());
-  }
-
-  protected abstract Class<? extends SQLProvider<Connection>> getConnectionProvider();
+  T get() throws SQLException;
 
 }

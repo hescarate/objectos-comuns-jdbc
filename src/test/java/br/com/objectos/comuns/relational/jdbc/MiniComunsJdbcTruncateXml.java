@@ -15,28 +15,14 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.sql.Connection;
-
-import br.com.objectos.comuns.relational.BatchInsert;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
-import com.google.inject.throwingproviders.ThrowingProviderBinder;
+import br.com.objectos.comuns.testing.dbunit.TruncateSupplier;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-abstract class ObjectosComunsRelationalJdbcModule extends AbstractModule {
-
+public class MiniComunsJdbcTruncateXml extends TruncateSupplier {
   @Override
-  protected void configure() {
-    bind(BatchInsert.class).to(BatchInsertJdbc.class).in(Scopes.SINGLETON);
-
-    ThrowingProviderBinder.create(binder()) //
-        .bind(SQLProvider.class, Connection.class) //
-        .to(getConnectionProvider());
+  public String getFilename() {
+    return "mini-comuns-jdbc-truncate.xml";
   }
-
-  protected abstract Class<? extends SQLProvider<Connection>> getConnectionProvider();
-
 }

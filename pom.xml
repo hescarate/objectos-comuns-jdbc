@@ -10,14 +10,16 @@
 	<artifactId>objectos-comuns-jdbc</artifactId>
 	<name>objectos comuns :: relational :: JDBC</name>
 	<properties>
+		<c3p0.version>0.9.1.2</c3p0.version>
 		<googlecode.flyway.version>1.4.2</googlecode.flyway.version>
 		<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
-		<jdbc.url>jdbc:mysql://localhost/OBJ_COMUNS_RELATIONAL</jdbc.url>
+		<jdbc.url>jdbc:mysql://localhost/COMUNS_RELATIONAL</jdbc.url>
 		<jdbc.user>tatu</jdbc.user>
 		<jdbc.password>tatu</jdbc.password>
-		<objectos.comuns.base.version>1.1.29-SNAPSHOT</objectos.comuns.base.version>
+		<objectos.comuns.base.version>2.0-SNAPSHOT</objectos.comuns.base.version>
 		<objectos.comuns.dbunit.version>2.0-SNAPSHOT</objectos.comuns.dbunit.version>
 		<objectos.comuns.relational.version>2.0-SNAPSHOT</objectos.comuns.relational.version>
+		<mysql.connector.version>5.1.6</mysql.connector.version>
 	</properties>
 	<build>
 		<plugins>
@@ -30,7 +32,15 @@
 					<url>${jdbc.url}</url>
 					<user>${jdbc.user}</user>
 					<password>${jdbc.password}</password>
+					<baseDir>db/jdbc-migration</baseDir>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>${mysql.connector.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
@@ -46,9 +56,25 @@
 			<version>${objectos.comuns.relational.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-throwingproviders</artifactId>
+			<version>${google.guice.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>${c3p0.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>objectos-comuns-dbunit</artifactId>
 			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.connector.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

@@ -23,36 +23,40 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.objectos.comuns.relational.Insercao;
+import br.com.objectos.comuns.relational.BatchInsert;
+import br.com.objectos.comuns.relational.RelationalException;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
-import com.google.inject.Provider;
+import com.google.inject.Inject;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class BatchInsertJdbc implements Insercao {
+class BatchInsertJdbc implements BatchInsert {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  private final Provider<Connection> connections;
+  private final SQLProvider<Connection> connections;
 
-  public BatchInsertJdbc(Provider<Connection> connections) {
+  @Inject
+  public BatchInsertJdbc(SQLProvider<Connection> connections) {
     this.connections = connections;
   }
 
   @Override
-  public void de(Object entity) {
+  public void of(Object entity) {
   }
 
   @Override
-  public void deTodos(Iterable<?> entities) {
+  public void allOf(Iterable<?> entities) {
+    Iterator<?> iterator = entities.iterator();
+    allOf(iterator);
   }
 
   @Override
-  public void deTodos(Iterator<?> entities) {
+  public void allOf(Iterator<?> entities) {
     Connection conn = null;
 
     try {
@@ -71,14 +75,21 @@ class BatchInsertJdbc implements Insercao {
 
         statement.executeUpdate();
       }
-    } catch (SQLException e) {
 
+      conn.commit();
+    } catch (SQLException e) {
+      try {
+        conn.rollback();
+      } catch (SQLException e1) {
+        logger.error("Could not properly rollback the transaction.", e);
+      }
+      throw new RelationalException("Could not insert entities. More info below.", e);
     } finally {
       if (conn != null) {
         try {
           conn.close();
         } catch (SQLException e) {
-          logger.error("", e);
+          logger.error("Could not properly close the connection.", e);
         }
       }
     }
