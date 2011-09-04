@@ -15,26 +15,14 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.sql.Connection;
-
-import com.google.inject.Scopes;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import br.com.objectos.comuns.testing.dbunit.DataSupplier;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-public class C3P0RelationalJdbcModule extends ObjectosComunsRelationalJdbcModule {
-
+public class MiniComunsJdbcXml extends DataSupplier {
   @Override
-  protected final void configure() {
-    super.configure();
-
-    bind(ComboPooledDataSource.class).toProvider(C3P0DataSourceProvider.class).in(Scopes.SINGLETON);
+  public String getFilename() {
+    return "mini-comuns-jdbc.xml";
   }
-
-  @Override
-  protected Class<? extends SQLProvider<Connection>> getConnectionProvider() {
-    return C3P0ConnectionProvider.class;
-  }
-
 }

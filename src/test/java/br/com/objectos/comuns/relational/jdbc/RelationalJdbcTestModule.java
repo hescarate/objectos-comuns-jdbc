@@ -15,23 +15,43 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.beans.PropertyVetoException;
+import br.com.objectos.comuns.sql.JdbcCredentials;
+import br.com.objectos.comuns.sql.JdbcCredentialsBuilder;
+import br.com.objectos.comuns.testing.dbunit.DBUnit;
+import br.com.objectos.comuns.testing.dbunit.DatabaseTesterModuleBuilder;
+import br.com.objectos.comuns.testing.dbunit.ObjectosComunsDbunitModule;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-public class RelationalJdbcTestModule extends C3P0RelationalJdbcModule {
+public class RelationalJdbcTestModule extends AbstractModule {
 
   @Override
-  protected void configureDataSource(ComboPooledDataSource dataSource) throws PropertyVetoException {
+  protected void configure() {
+    System.setProperty(DBUnit.QUALIFIED_TABLE_NAMES, Boolean.TRUE.toString());
 
-    dataSource.setDriverClass("com.mysql.jdbc.Driver");
-    dataSource.setJdbcUrl("jdbc:mysql://localhost/COMUNS_RELATIONAL");
-    dataSource.setUser("tatu");
-    dataSource.setPassword("tatu");
+    install(new C3P0RelationalJdbcModule());
 
+    JdbcCredentials credentials = getCredentials();
+    install(new ObjectosComunsDbunitModule());
+    install(new DatabaseTesterModuleBuilder() //
+        .jdbc(credentials) //
+        .withMysql() //
+        .build());
+  }
+
+  @Provides
+  @C3P0
+  public JdbcCredentials getCredentials() {
+    return new JdbcCredentialsBuilder() //
+        .driverClass("com.mysql.jdbc.Driver") //
+        .url("jdbc:mysql://localhost/COMUNS_RELATIONAL") //
+        .user("tatu") //
+        .password("tatu") //
+        .get();
   }
 
 }

@@ -15,26 +15,21 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.sql.Connection;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import com.google.inject.Scopes;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.google.inject.BindingAnnotation;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-public class C3P0RelationalJdbcModule extends ObjectosComunsRelationalJdbcModule {
-
-  @Override
-  protected final void configure() {
-    super.configure();
-
-    bind(ComboPooledDataSource.class).toProvider(C3P0DataSourceProvider.class).in(Scopes.SINGLETON);
-  }
-
-  @Override
-  protected Class<? extends SQLProvider<Connection>> getConnectionProvider() {
-    return C3P0ConnectionProvider.class;
-  }
-
-}
+@BindingAnnotation
+@Retention(RetentionPolicy.RUNTIME)
+@Target({
+    ElementType.FIELD, //
+    ElementType.METHOD, //
+    ElementType.PARAMETER //
+})
+public @interface C3P0 {}

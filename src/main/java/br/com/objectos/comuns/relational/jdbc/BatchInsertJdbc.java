@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.objectos.comuns.relational.BatchInsert;
+import br.com.objectos.comuns.relational.RelationalException;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
@@ -77,13 +78,18 @@ class BatchInsertJdbc implements BatchInsert {
 
       conn.commit();
     } catch (SQLException e) {
-
+      try {
+        conn.rollback();
+      } catch (SQLException e1) {
+        logger.error("Could not properly rollback the transaction.", e);
+      }
+      throw new RelationalException("Could not insert entities. More info below.", e);
     } finally {
       if (conn != null) {
         try {
           conn.close();
         } catch (SQLException e) {
-          logger.error("", e);
+          logger.error("Could not properly close the connection.", e);
         }
       }
     }

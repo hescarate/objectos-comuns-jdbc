@@ -17,10 +17,12 @@ package br.com.objectos.comuns.relational.jdbc;
 
 import java.util.List;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
 import br.com.objectos.comuns.relational.BatchInsert;
+import br.com.objectos.comuns.testing.dbunit.DBUnit;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
@@ -34,6 +36,14 @@ public class BatchInsertTest {
 
   @Inject
   private BatchInsert batchInsert;
+
+  @Inject
+  private DBUnit dbunit;
+
+  @BeforeMethod
+  public void reset() {
+    dbunit.load(new MiniComunsJdbcTruncateXml());
+  }
 
   public void simple_entity_should_be_inserted_correctly() {
     Simple s0 = new Simple("A");
