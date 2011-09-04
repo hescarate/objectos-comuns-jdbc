@@ -17,7 +17,6 @@ package br.com.objectos.comuns.relational.jdbc;
 
 import br.com.objectos.comuns.sql.JdbcCredentials;
 import br.com.objectos.comuns.sql.JdbcCredentialsBuilder;
-import br.com.objectos.comuns.testing.dbunit.DBUnit;
 import br.com.objectos.comuns.testing.dbunit.DatabaseTesterModuleBuilder;
 import br.com.objectos.comuns.testing.dbunit.ObjectosComunsDbunitModule;
 
@@ -31,8 +30,6 @@ public class RelationalJdbcTestModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    System.setProperty(DBUnit.QUALIFIED_TABLE_NAMES, Boolean.TRUE.toString());
-
     install(new C3P0RelationalJdbcModule());
 
     JdbcCredentials credentials = getCredentials();

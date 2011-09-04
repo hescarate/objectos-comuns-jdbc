@@ -17,7 +17,9 @@ package br.com.objectos.comuns.relational.jdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Iterator;
 
 import org.slf4j.Logger;
@@ -68,12 +70,19 @@ class BatchInsertJdbc implements BatchInsert {
       while (inserts.hasNext()) {
         Insert insert = inserts.next();
         String sql = insert.toString();
-        PreparedStatement statement = conn.prepareStatement(sql);
+        PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         Stmt stmt = new PreparedStatementWrapper(statement);
         insert.prepare(stmt);
 
         statement.executeUpdate();
+
+        GeneratedKeyCallback keyCallback = insert.getKeyCallback();
+        if (keyCallback != null) {
+          ResultSet rs = statement.getGeneratedKeys();
+          keyCallback.set(rs);
+          rs.close();
+        }
       }
 
       conn.commit();
