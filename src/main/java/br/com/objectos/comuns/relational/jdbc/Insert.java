@@ -35,6 +35,8 @@ public class Insert {
 
   private final Map<String, InsertValue> values = newLinkedHashMap();
 
+  private GeneratedKeyCallback keyCallback;
+
   public Insert(String table) {
     this.table = table;
   }
@@ -57,6 +59,11 @@ public class Insert {
     return this;
   }
 
+  public Insert onGeneratedKey(GeneratedKeyCallback callback) {
+    this.keyCallback = callback;
+    return this;
+  }
+
   public void prepare(Stmt stmt) {
     Collection<InsertValue> vals = values.values();
     List<InsertValue> params = ImmutableList.copyOf(vals);
@@ -64,6 +71,10 @@ public class Insert {
     for (InsertValue param : params) {
       param.set(stmt);
     }
+  }
+
+  GeneratedKeyCallback getKeyCallback() {
+    return keyCallback;
   }
 
   @Override

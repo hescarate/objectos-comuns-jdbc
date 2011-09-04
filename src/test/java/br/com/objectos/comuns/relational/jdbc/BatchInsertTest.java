@@ -15,6 +15,11 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import static com.google.common.collect.Lists.transform;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+
 import java.util.List;
 
 import org.testng.annotations.BeforeMethod;
@@ -24,6 +29,7 @@ import org.testng.annotations.Test;
 import br.com.objectos.comuns.relational.BatchInsert;
 import br.com.objectos.comuns.testing.dbunit.DBUnit;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 
@@ -53,6 +59,28 @@ public class BatchInsertTest {
     List<Simple> entities = ImmutableList.of(s0, s1, s2);
 
     batchInsert.allOf(entities);
+  }
+
+  public void generated_key_callback_should_properly_populate_id() {
+    Simple s0 = new Simple("A");
+    Simple s1 = new Simple("B");
+
+    List<Simple> entities = ImmutableList.of(s0, s1);
+    List<Integer> ids = transform(entities, new ToId());
+    assertThat(ids.toString(), equalTo("[null, null]"));
+
+    batchInsert.allOf(entities);
+
+    ids = transform(entities, new ToId());
+    assertThat(ids.get(0), notNullValue());
+    assertThat(ids.get(1), notNullValue());
+  }
+
+  private class ToId implements Function<Simple, Integer> {
+    @Override
+    public Integer apply(Simple input) {
+      return input.getId();
+    }
   }
 
 }

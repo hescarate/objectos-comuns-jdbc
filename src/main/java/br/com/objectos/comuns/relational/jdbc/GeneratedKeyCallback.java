@@ -21,39 +21,8 @@ import java.sql.SQLException;
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-public class Simple implements Insertable {
+public interface GeneratedKeyCallback {
 
-  private Integer id;
-
-  private final String string;
-
-  public Simple(String string) {
-    this.string = string;
-  }
-
-  public Simple(ResultSet rs) throws SQLException {
-    this.id = rs.getInt("ID");
-    this.string = rs.getString("STRING");
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public String getString() {
-    return string;
-  }
-
-  @Override
-  public Insert getInsert() {
-    return Insert.into("SIMPLE") //
-        .value("STRING", string) //
-        .onGeneratedKey(new GeneratedKeyCallback() {
-          @Override
-          public void set(ResultSet rs) throws SQLException {
-            id = rs.next() ? rs.getInt(1) : null;
-          }
-        });
-  }
+  void set(ResultSet rs) throws SQLException;
 
 }
