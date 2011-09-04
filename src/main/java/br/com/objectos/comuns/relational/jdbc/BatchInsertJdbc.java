@@ -28,7 +28,7 @@ import br.com.objectos.comuns.relational.BatchInsert;
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
-import com.google.inject.Provider;
+import com.google.inject.Inject;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
@@ -37,9 +37,10 @@ class BatchInsertJdbc implements BatchInsert {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  private final Provider<Connection> connections;
+  private final SQLProvider<Connection> connections;
 
-  public BatchInsertJdbc(Provider<Connection> connections) {
+  @Inject
+  public BatchInsertJdbc(SQLProvider<Connection> connections) {
     this.connections = connections;
   }
 
@@ -49,6 +50,8 @@ class BatchInsertJdbc implements BatchInsert {
 
   @Override
   public void allOf(Iterable<?> entities) {
+    Iterator<?> iterator = entities.iterator();
+    allOf(iterator);
   }
 
   @Override
@@ -71,6 +74,8 @@ class BatchInsertJdbc implements BatchInsert {
 
         statement.executeUpdate();
       }
+
+      conn.commit();
     } catch (SQLException e) {
 
     } finally {

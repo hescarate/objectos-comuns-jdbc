@@ -15,28 +15,31 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.sql.Connection;
-
-import br.com.objectos.comuns.relational.BatchInsert;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
-import com.google.inject.throwingproviders.ThrowingProviderBinder;
-
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-abstract class ObjectosComunsRelationalJdbcModule extends AbstractModule {
+public class Simple implements Insertable {
 
-  @Override
-  protected void configure() {
-    bind(BatchInsert.class).to(BatchInsertJdbc.class).in(Scopes.SINGLETON);
+  private Integer id;
 
-    ThrowingProviderBinder.create(binder()) //
-        .bind(SQLProvider.class, Connection.class) //
-        .to(getConnectionProvider());
+  private final String string;
+
+  public Simple(String string) {
+    this.string = string;
   }
 
-  protected abstract Class<? extends SQLProvider<Connection>> getConnectionProvider();
+  public Integer getId() {
+    return id;
+  }
+
+  public String getString() {
+    return string;
+  }
+
+  @Override
+  public Insert getInsert() {
+    return Insert.into("SIMPLE") //
+        .value("STRING", string);
+  }
 
 }

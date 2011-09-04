@@ -1,4 +1,4 @@
-use OBJ_COMUNS_RELATIONAL;
+use COMUNS_RELATIONAL;
 
 create table SIMPLE (
 ID integer not null auto_increment, 

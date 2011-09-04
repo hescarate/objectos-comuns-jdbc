@@ -15,28 +15,34 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.sql.Connection;
+import java.util.List;
+
+import org.testng.annotations.Guice;
+import org.testng.annotations.Test;
 
 import br.com.objectos.comuns.relational.BatchInsert;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
-import com.google.inject.throwingproviders.ThrowingProviderBinder;
+import com.google.common.collect.ImmutableList;
+import com.google.inject.Inject;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-abstract class ObjectosComunsRelationalJdbcModule extends AbstractModule {
+@Test
+@Guice(modules = { RelationalJdbcTestModule.class })
+public class BatchInsertTest {
 
-  @Override
-  protected void configure() {
-    bind(BatchInsert.class).to(BatchInsertJdbc.class).in(Scopes.SINGLETON);
+  @Inject
+  private BatchInsert batchInsert;
 
-    ThrowingProviderBinder.create(binder()) //
-        .bind(SQLProvider.class, Connection.class) //
-        .to(getConnectionProvider());
+  public void simple_entity_should_be_inserted_correctly() {
+    Simple s0 = new Simple("A");
+    Simple s1 = new Simple("B");
+    Simple s2 = new Simple("C");
+
+    List<Simple> entities = ImmutableList.of(s0, s1, s2);
+
+    batchInsert.allOf(entities);
   }
-
-  protected abstract Class<? extends SQLProvider<Connection>> getConnectionProvider();
 
 }

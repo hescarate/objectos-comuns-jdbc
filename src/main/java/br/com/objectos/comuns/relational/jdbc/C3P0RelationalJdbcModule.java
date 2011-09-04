@@ -15,28 +15,39 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import java.beans.PropertyVetoException;
 import java.sql.Connection;
 
-import br.com.objectos.comuns.relational.BatchInsert;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
-import com.google.inject.throwingproviders.ThrowingProviderBinder;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-abstract class ObjectosComunsRelationalJdbcModule extends AbstractModule {
+public class C3P0RelationalJdbcModule extends ObjectosComunsRelationalJdbcModule {
 
   @Override
-  protected void configure() {
-    bind(BatchInsert.class).to(BatchInsertJdbc.class).in(Scopes.SINGLETON);
+  protected final void configure() {
+    super.configure();
 
-    ThrowingProviderBinder.create(binder()) //
-        .bind(SQLProvider.class, Connection.class) //
-        .to(getConnectionProvider());
+    try {
+
+      ComboPooledDataSource dataSource = new ComboPooledDataSource();
+      configureDataSource(dataSource);
+      bind(ComboPooledDataSource.class).toInstance(dataSource);
+
+    } catch (PropertyVetoException e) {
+
+      addError(e);
+
+    }
   }
 
-  protected abstract Class<? extends SQLProvider<Connection>> getConnectionProvider();
+  protected void configureDataSource(ComboPooledDataSource dataSource) throws PropertyVetoException {
+  }
+
+  @Override
+  protected Class<? extends SQLProvider<Connection>> getConnectionProvider() {
+    return C3P0ConnectionProvider.class;
+  }
 
 }

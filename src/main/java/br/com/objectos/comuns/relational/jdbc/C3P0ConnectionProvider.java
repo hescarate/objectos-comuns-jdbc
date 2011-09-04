@@ -16,27 +16,28 @@
 package br.com.objectos.comuns.relational.jdbc;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
-import br.com.objectos.comuns.relational.BatchInsert;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
-import com.google.inject.throwingproviders.ThrowingProviderBinder;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-abstract class ObjectosComunsRelationalJdbcModule extends AbstractModule {
+@Singleton
+class C3P0ConnectionProvider implements SQLProvider<Connection> {
 
-  @Override
-  protected void configure() {
-    bind(BatchInsert.class).to(BatchInsertJdbc.class).in(Scopes.SINGLETON);
+  private final ComboPooledDataSource dataSource;
 
-    ThrowingProviderBinder.create(binder()) //
-        .bind(SQLProvider.class, Connection.class) //
-        .to(getConnectionProvider());
+  @Inject
+  public C3P0ConnectionProvider(ComboPooledDataSource dataSource) {
+    this.dataSource = dataSource;
   }
 
-  protected abstract Class<? extends SQLProvider<Connection>> getConnectionProvider();
+  @Override
+  public Connection get() throws SQLException {
+    return dataSource.getConnection();
+  }
 
 }

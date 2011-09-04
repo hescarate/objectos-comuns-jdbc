@@ -15,28 +15,23 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.sql.Connection;
+import java.beans.PropertyVetoException;
 
-import br.com.objectos.comuns.relational.BatchInsert;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
-import com.google.inject.throwingproviders.ThrowingProviderBinder;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-abstract class ObjectosComunsRelationalJdbcModule extends AbstractModule {
+public class RelationalJdbcTestModule extends C3P0RelationalJdbcModule {
 
   @Override
-  protected void configure() {
-    bind(BatchInsert.class).to(BatchInsertJdbc.class).in(Scopes.SINGLETON);
+  protected void configureDataSource(ComboPooledDataSource dataSource) throws PropertyVetoException {
 
-    ThrowingProviderBinder.create(binder()) //
-        .bind(SQLProvider.class, Connection.class) //
-        .to(getConnectionProvider());
+    dataSource.setDriverClass("com.mysql.jdbc.Driver");
+    dataSource.setJdbcUrl("jdbc:mysql://localhost/COMUNS_RELATIONAL");
+    dataSource.setUser("tatu");
+    dataSource.setPassword("tatu");
+
   }
-
-  protected abstract Class<? extends SQLProvider<Connection>> getConnectionProvider();
 
 }
