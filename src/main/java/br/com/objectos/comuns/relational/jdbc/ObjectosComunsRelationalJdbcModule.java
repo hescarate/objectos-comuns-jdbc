@@ -18,7 +18,7 @@ package br.com.objectos.comuns.relational.jdbc;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import br.com.objectos.comuns.bancodedados.Insercao;
+import br.com.objectos.comuns.relational.Insercao;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
