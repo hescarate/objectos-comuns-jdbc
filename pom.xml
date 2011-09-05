@@ -8,6 +8,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>objectos-comuns-jdbc</artifactId>
 	<name>objectos comuns :: relational :: JDBC</name>
+    <version>2.0-SNAPSHOT</version>
 	<properties>
 		<c3p0.version>0.9.1.2</c3p0.version>
 		<googlecode.flyway.version>1.4.2</googlecode.flyway.version>
