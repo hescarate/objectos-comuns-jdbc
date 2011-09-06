@@ -33,7 +33,7 @@ public class Insert {
 
   private final String table;
 
-  private final Map<String, InsertValue> values = newLinkedHashMap();
+  private final Map<String, ParamValue> values = newLinkedHashMap();
 
   private GeneratedKeyCallback keyCallback;
 
@@ -47,12 +47,12 @@ public class Insert {
 
   public Insert value(String colName, Object value) {
     int index = values.size() + 1;
-    InsertValue val; // so we never forget a if condition
+    ParamValue val; // so we never forget a if condition
 
     if (value instanceof String) {
-      val = new InsertString(index, value);
+      val = new ParamString(index, value);
     } else {
-      val = new InsertObject(index, value);
+      val = new ParamObject(index, value);
     }
 
     values.put(colName, val);
@@ -65,10 +65,10 @@ public class Insert {
   }
 
   public void prepare(Stmt stmt) {
-    Collection<InsertValue> vals = values.values();
-    List<InsertValue> params = ImmutableList.copyOf(vals);
+    Collection<ParamValue> vals = values.values();
+    List<ParamValue> params = ImmutableList.copyOf(vals);
 
-    for (InsertValue param : params) {
+    for (ParamValue param : params) {
       param.set(stmt);
     }
   }

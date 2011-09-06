@@ -18,6 +18,8 @@ package br.com.objectos.comuns.relational.jdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.google.common.base.Objects;
+
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
@@ -54,6 +56,14 @@ public class Simple implements Insertable {
             id = rs.next() ? rs.getInt(1) : null;
           }
         });
+  }
+
+  @Override
+  public String toString() {
+    return Objects.toStringHelper(this) //
+        .add("id", id) //
+        .add("string", string) //
+        .toString();
   }
 
 }

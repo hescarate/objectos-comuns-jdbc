@@ -33,6 +33,7 @@ public class RelationalJdbcTestModule extends AbstractModule {
     install(new C3P0RelationalJdbcModule());
 
     JdbcCredentials credentials = getCredentials();
+
     install(new ObjectosComunsDbunitModule());
     install(new DatabaseTesterModuleBuilder() //
         .jdbc(credentials) //

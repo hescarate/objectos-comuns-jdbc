@@ -15,18 +15,16 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class InsertString extends InsertValue {
-
-  public InsertString(int index, Object value) {
-    super(index, value);
-  }
-
+public class SimpleEntityLoader implements ResultSetLoader<Simple> {
   @Override
-  public void set(Stmt stmt) {
-    stmt.setString(index, (String) value);
+  public Simple load(ResultSet rs) throws SQLException {
+    return new Simple(rs);
   }
-
 }

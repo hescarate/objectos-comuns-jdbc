@@ -1,30 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
 
-	<COMUNS.ENTITY id="1" intValue="1" stringValue="AAA" />
-	<COMUNS.ENTITY id="2" intValue="2" stringValue="III" />
-	<COMUNS.ENTITY id="3" intValue="3" stringValue="CCC" />
-	<COMUNS.ENTITY id="4" intValue="4" stringValue="FFF" />
-	<COMUNS.ENTITY id="5" intValue="5" stringValue="EEE" />
-	<COMUNS.ENTITY id="6" intValue="6" stringValue="DDD" />
-	<COMUNS.ENTITY id="7" intValue="7" stringValue="GGG" />
-	<COMUNS.ENTITY id="8" intValue="8" stringValue="HHH" />
-	<COMUNS.ENTITY id="9" intValue="9" stringValue="BBB" />
-	<COMUNS.ENTITY id="10" intValue="10" stringValue="JJJ" />
-
-	<COMUNS.SIMPLE id="1" value="1" />
-	<COMUNS.SIMPLE id="2" value="2" />
-	<COMUNS.SIMPLE id="3" value="3" />
-	<COMUNS.SIMPLE id="4" value="4" />
-	<COMUNS.SIMPLE id="5" value="5" />
-	<COMUNS.SIMPLE id="6" value="6" />
-	<COMUNS.SIMPLE id="7" value="7" />
-	<COMUNS.SIMPLE id="8" value="8" />
-	<COMUNS.SIMPLE id="9" value="9" />
-	<COMUNS.SIMPLE id="10" value="10" />
-
-	<COMUNS.ULTIMO_ACESSO id="1" valor="1" DATA_CRIACAO="2009-12-31" DATA_ATUALIZACAO="2009-12-31" ULTIMO_ACESSO="2009-12-31" />
-	<COMUNS.ULTIMO_ACESSO id="2" valor="2" DATA_CRIACAO="2009-12-31" DATA_ATUALIZACAO="2009-12-31" ULTIMO_ACESSO="2009-12-31" />
-	<COMUNS.ULTIMO_ACESSO id="3" valor="3" DATA_CRIACAO="2009-12-31" DATA_ATUALIZACAO="2009-12-31" ULTIMO_ACESSO="2009-12-31" />
+	<COMUNS_RELATIONAL.SIMPLE ID="1" STRING="C" />
+	<COMUNS_RELATIONAL.SIMPLE ID="2" STRING="B" />
+	<COMUNS_RELATIONAL.SIMPLE ID="3" STRING="A" />
 
 </dataset>

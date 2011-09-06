@@ -15,22 +15,11 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import com.google.common.base.Preconditions;
-
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-abstract class InsertValue {
+class New {
 
-  final int index;
-
-  final Object value;
-
-  public InsertValue(int index, Object value) {
-    this.index = index;
-    this.value = Preconditions.checkNotNull(value);
-  }
-
-  abstract void set(Stmt stmt);
+  public static final String Line = System.getProperty("line.separator");
 
 }

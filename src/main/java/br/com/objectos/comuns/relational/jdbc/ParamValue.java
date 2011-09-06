@@ -15,18 +15,34 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import com.google.common.base.Preconditions;
+
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class InsertObject extends InsertValue {
+abstract class ParamValue {
 
-  public InsertObject(int index, Object value) {
-    super(index, value);
+  final int index;
+
+  final Object value;
+
+  public ParamValue(int index, Object value) {
+    this.index = index;
+    this.value = Preconditions.checkNotNull(value);
   }
 
-  @Override
-  public void set(Stmt stmt) {
-    stmt.setObject(index, value);
+  public static ParamValue valueOf(int index, Object value) {
+    ParamValue val; // so we never forget a if condition
+
+    if (value instanceof String) {
+      val = new ParamString(index, value);
+    } else {
+      val = new ParamObject(index, value);
+    }
+
+    return val;
   }
+
+  abstract void set(Stmt stmt);
 
 }
