@@ -44,6 +44,9 @@ public class BatchInsertTest {
   private BatchInsert batchInsert;
 
   @Inject
+  private JdbcSQLBuilderExec exec;
+
+  @Inject
   private DBUnit dbunit;
 
   @BeforeMethod
@@ -59,6 +62,12 @@ public class BatchInsertTest {
     List<Simple> entities = ImmutableList.of(s0, s1, s2);
 
     batchInsert.allOf(entities);
+
+    List<Simple> r = findAll();
+    assertThat(r.size(), equalTo(3));
+    assertThat(r.get(0).getString(), equalTo("A"));
+    assertThat(r.get(1).getString(), equalTo("B"));
+    assertThat(r.get(2).getString(), equalTo("C"));
   }
 
   public void generated_key_callback_should_properly_populate_id() {
@@ -74,6 +83,15 @@ public class BatchInsertTest {
     ids = transform(entities, new ToId());
     assertThat(ids.get(0), notNullValue());
     assertThat(ids.get(1), notNullValue());
+  }
+
+  private List<Simple> findAll() {
+    MysqlSQLBuilder sql = new MysqlSQLBuilder();
+    sql.select("*").from("COMUNS_RELATIONAL.SIMPLE");
+    sql.order("ID").ascending();
+
+    ResultSetLoader<Simple> entityLoader = new SimpleEntityLoader();
+    return exec.list(entityLoader, sql);
   }
 
   private class ToId implements Function<Simple, Integer> {
