@@ -35,7 +35,7 @@ import com.google.inject.Inject;
  */
 @Test
 @Guice(modules = RelationalJdbcTestModule.class)
-public class JdbcSQLBuilderSelectTest {
+public class MysqlSQLBuilderSelectTest {
 
   @Inject
   private JdbcSQLBuilderExec exec;
@@ -52,7 +52,7 @@ public class JdbcSQLBuilderSelectTest {
   }
 
   public void select_columns_should_return_records() {
-    JdbcSQLBuilder sql = new JdbcSQLBuilder();
+    MysqlSQLBuilder sql = new MysqlSQLBuilder();
     sql.select("*").from("COMUNS_RELATIONAL.SIMPLE");
     sql.order("ID").ascending();
 
@@ -61,13 +61,13 @@ public class JdbcSQLBuilderSelectTest {
     assertThat(result.size(), equalTo(3));
 
     List<String> strings = transform(result, Functions.toStringFunction());
-    assertThat(strings.get(0), equalTo("Simple{id=1, string=C}"));
-    assertThat(strings.get(1), equalTo("Simple{id=2, string=B}"));
-    assertThat(strings.get(2), equalTo("Simple{id=3, string=A}"));
+    assertThat(strings.get(0), equalTo("Simple{id=1, string=CDE}"));
+    assertThat(strings.get(1), equalTo("Simple{id=2, string=BCD}"));
+    assertThat(strings.get(2), equalTo("Simple{id=3, string=ABC}"));
   }
 
   public void select_with_explicit_column_names_should_be_ok() {
-    JdbcSQLBuilder sql = new JdbcSQLBuilder();
+    MysqlSQLBuilder sql = new MysqlSQLBuilder();
     sql.select("ID", "STRING").from("COMUNS_RELATIONAL.SIMPLE");
     sql.order("ID").ascending();
 
@@ -76,13 +76,13 @@ public class JdbcSQLBuilderSelectTest {
     assertThat(result.size(), equalTo(3));
 
     List<String> strings = transform(result, Functions.toStringFunction());
-    assertThat(strings.get(0), equalTo("Simple{id=1, string=C}"));
-    assertThat(strings.get(1), equalTo("Simple{id=2, string=B}"));
-    assertThat(strings.get(2), equalTo("Simple{id=3, string=A}"));
+    assertThat(strings.get(0), equalTo("Simple{id=1, string=CDE}"));
+    assertThat(strings.get(1), equalTo("Simple{id=2, string=BCD}"));
+    assertThat(strings.get(2), equalTo("Simple{id=3, string=ABC}"));
   }
 
   public void ordering_ascending_should_be_ok() {
-    JdbcSQLBuilder sql = new JdbcSQLBuilder();
+    MysqlSQLBuilder sql = new MysqlSQLBuilder();
     sql.select("ID", "STRING").from("COMUNS_RELATIONAL.SIMPLE");
     sql.order("STRING").ascending();
 
@@ -91,13 +91,13 @@ public class JdbcSQLBuilderSelectTest {
     assertThat(result.size(), equalTo(3));
 
     List<String> strings = transform(result, Functions.toStringFunction());
-    assertThat(strings.get(0), equalTo("Simple{id=3, string=A}"));
-    assertThat(strings.get(1), equalTo("Simple{id=2, string=B}"));
-    assertThat(strings.get(2), equalTo("Simple{id=1, string=C}"));
+    assertThat(strings.get(0), equalTo("Simple{id=3, string=ABC}"));
+    assertThat(strings.get(1), equalTo("Simple{id=2, string=BCD}"));
+    assertThat(strings.get(2), equalTo("Simple{id=1, string=CDE}"));
   }
 
   public void ordering_descending_should_be_ok() {
-    JdbcSQLBuilder sql = new JdbcSQLBuilder();
+    MysqlSQLBuilder sql = new MysqlSQLBuilder();
     sql.select("ID", "STRING").from("COMUNS_RELATIONAL.SIMPLE");
     sql.order("STRING").descending();
 
@@ -106,13 +106,13 @@ public class JdbcSQLBuilderSelectTest {
     assertThat(result.size(), equalTo(3));
 
     List<String> strings = transform(result, Functions.toStringFunction());
-    assertThat(strings.get(0), equalTo("Simple{id=1, string=C}"));
-    assertThat(strings.get(1), equalTo("Simple{id=2, string=B}"));
-    assertThat(strings.get(2), equalTo("Simple{id=3, string=A}"));
+    assertThat(strings.get(0), equalTo("Simple{id=1, string=CDE}"));
+    assertThat(strings.get(1), equalTo("Simple{id=2, string=BCD}"));
+    assertThat(strings.get(2), equalTo("Simple{id=3, string=ABC}"));
   }
 
   public void sum_aggregate_should_be_ok() {
-    JdbcSQLBuilder sql = new JdbcSQLBuilder();
+    MysqlSQLBuilder sql = new MysqlSQLBuilder();
     sql.select("sum(ID)").from("COMUNS_RELATIONAL.SIMPLE");
 
     List<Long> result = exec.list(new LongLoader(), sql);

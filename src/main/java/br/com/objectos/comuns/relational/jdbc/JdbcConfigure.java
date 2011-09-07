@@ -86,6 +86,7 @@ class JdbcConfigure {
       sql.append("where ");
       String _where = Joiner.on("and " + New.Line).join(where);
       sql.append(_where);
+      sql.append(" " + New.Line);
     }
   }
 
@@ -95,6 +96,7 @@ class JdbcConfigure {
       sql.append("order by ");
       String _orders = Joiner.on(", " + New.Line).join(orders);
       sql.append(_orders);
+      sql.append(" " + New.Line);
     }
   }
 

@@ -15,24 +15,16 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import br.com.objectos.comuns.relational.search.WhereProperty;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-public interface Stmt {
+class MysqlSQLBuilder extends AnsiSQLBuilder {
 
-  void setDate(int index, Date value);
-
-  void setString(int index, String value);
-
-  void setObject(int index, Object value);
-
-  void setBigDecimal(int index, BigDecimal value);
-  void setDouble(int index, Double value);
-  void setFloat(int index, Float value);
-  void setInt(int index, Integer value);
-  void setLong(int index, Long value);
+  @Override
+  protected WhereProperty newWhereProperty(String property) {
+    return new MysqlWhereProperty(property);
+  }
 
 }

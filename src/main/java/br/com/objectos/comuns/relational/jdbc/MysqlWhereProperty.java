@@ -15,24 +15,37 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-public interface Stmt {
+class MysqlWhereProperty extends AnsiWhereProperty {
 
-  void setDate(int index, Date value);
+  public MysqlWhereProperty(String property) {
+    super(property);
+  }
 
-  void setString(int index, String value);
+  @Override
+  public void like(String value) {
+    this.value = value;
+    if (isSet(value)) {
+      where = String.format("%s like concat('%%', ?, '%%')", property);
+    }
+  }
 
-  void setObject(int index, Object value);
+  @Override
+  public void endsWith(String value) {
+    this.value = value;
+    if (isSet(value)) {
+      where = String.format("%s like concat('%%', ?)", property);
+    }
+  }
 
-  void setBigDecimal(int index, BigDecimal value);
-  void setDouble(int index, Double value);
-  void setFloat(int index, Float value);
-  void setInt(int index, Integer value);
-  void setLong(int index, Long value);
+  @Override
+  public void startsWith(String value) {
+    this.value = value;
+    if (isSet(value)) {
+      where = String.format("%s like concat(?, '%%')", property);
+    }
+  }
 
 }

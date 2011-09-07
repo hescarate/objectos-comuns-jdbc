@@ -70,7 +70,7 @@ abstract class AbstractJdbcSQLFunction implements HasSQLFunctions, HasElements {
 
   @Override
   public final WhereProperty where(String property) {
-    WhereProperty where = new JdbcWhereProperty(property);
+    WhereProperty where = newWhereProperty(property);
     elements.put(Where.class, where);
     return where;
   }
@@ -88,6 +88,10 @@ abstract class AbstractJdbcSQLFunction implements HasSQLFunctions, HasElements {
 
   protected void putElement(Class<?> key, Element element) {
     elements.put(key, element);
+  }
+
+  protected WhereProperty newWhereProperty(String property) {
+    return new AnsiWhereProperty(property);
   }
 
 }

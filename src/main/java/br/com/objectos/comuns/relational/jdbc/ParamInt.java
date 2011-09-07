@@ -15,24 +15,18 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-public interface Stmt {
+class ParamInt extends ParamValue {
 
-  void setDate(int index, Date value);
+  public ParamInt(int index, Object value) {
+    super(index, value);
+  }
 
-  void setString(int index, String value);
-
-  void setObject(int index, Object value);
-
-  void setBigDecimal(int index, BigDecimal value);
-  void setDouble(int index, Double value);
-  void setFloat(int index, Float value);
-  void setInt(int index, Integer value);
-  void setLong(int index, Long value);
+  @Override
+  void set(Stmt stmt) {
+    stmt.setInt(index, (Integer) value);
+  }
 
 }

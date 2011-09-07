@@ -24,7 +24,7 @@ import br.com.objectos.comuns.relational.search.SelectColumns;
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-public class JdbcSQLBuilder extends AbstractJdbcSQLFunction implements SQLBuilder {
+public class AnsiSQLBuilder extends AbstractJdbcSQLFunction implements SQLBuilder {
 
   @Override
   public SelectColumns select(String... columns) {

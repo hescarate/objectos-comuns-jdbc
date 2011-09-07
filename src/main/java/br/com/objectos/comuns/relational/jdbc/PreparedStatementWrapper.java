@@ -15,8 +15,10 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
 
 import com.google.common.base.Throwables;
 
@@ -32,6 +34,16 @@ class PreparedStatementWrapper implements Stmt {
   }
 
   @Override
+  public void setDate(int index, Date value) {
+    try {
+      java.sql.Date sql = value != null ? new java.sql.Date(value.getTime()) : null;
+      stmt.setDate(index, sql);
+    } catch (SQLException e) {
+      throw Throwables.propagate(e);
+    }
+  }
+
+  @Override
   public void setString(int index, String value) {
     try {
       stmt.setString(index, value);
@@ -44,6 +56,51 @@ class PreparedStatementWrapper implements Stmt {
   public void setObject(int index, Object value) {
     try {
       stmt.setObject(index, value);
+    } catch (SQLException e) {
+      throw Throwables.propagate(e);
+    }
+  }
+
+  @Override
+  public void setBigDecimal(int index, BigDecimal value) {
+    try {
+      stmt.setBigDecimal(index, value);
+    } catch (SQLException e) {
+      throw Throwables.propagate(e);
+    }
+  }
+
+  @Override
+  public void setDouble(int index, Double value) {
+    try {
+      stmt.setDouble(index, value);
+    } catch (SQLException e) {
+      throw Throwables.propagate(e);
+    }
+  }
+
+  @Override
+  public void setFloat(int index, Float value) {
+    try {
+      stmt.setFloat(index, value);
+    } catch (SQLException e) {
+      throw Throwables.propagate(e);
+    }
+  }
+
+  @Override
+  public void setInt(int index, Integer value) {
+    try {
+      stmt.setInt(index, value);
+    } catch (SQLException e) {
+      throw Throwables.propagate(e);
+    }
+  }
+
+  @Override
+  public void setLong(int index, Long value) {
+    try {
+      stmt.setLong(index, value);
     } catch (SQLException e) {
       throw Throwables.propagate(e);
     }

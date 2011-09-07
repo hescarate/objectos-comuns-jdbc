@@ -25,15 +25,15 @@ import com.google.common.base.Preconditions;
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-public class JdbcWhereProperty extends AbstractJdbcWhere implements WhereProperty {
+class AnsiWhereProperty extends AbstractJdbcWhere implements WhereProperty {
 
-  private final String property;
+  final String property;
 
-  private String where;
+  String where;
 
-  private Object value;
+  Object value;
 
-  public JdbcWhereProperty(String property) {
+  public AnsiWhereProperty(String property) {
     this.property = Preconditions.checkNotNull(property);
   }
 
@@ -64,7 +64,7 @@ public class JdbcWhereProperty extends AbstractJdbcWhere implements WherePropert
   public void like(String value) {
     this.value = value;
     if (isSet(value)) {
-      where = String.format("%s like ?", property);
+      where = String.format("%s like '%%' || ? || '%%'", property);
     }
   }
 
@@ -77,7 +77,7 @@ public class JdbcWhereProperty extends AbstractJdbcWhere implements WherePropert
   public void endsWith(String value) {
     this.value = value;
     if (isSet(value)) {
-      where = String.format("%s like '%' || ?", property);
+      where = String.format("%s like '%%' || ?", property);
     }
   }
 
@@ -85,7 +85,7 @@ public class JdbcWhereProperty extends AbstractJdbcWhere implements WherePropert
   public void startsWith(String value) {
     this.value = value;
     if (isSet(value)) {
-      where = String.format("%s like ? || '%'", property);
+      where = String.format("%s like ? || '%%'", property);
     }
   }
 
