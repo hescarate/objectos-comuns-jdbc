@@ -15,9 +15,28 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import br.com.objectos.comuns.relational.search.SQLBuilder;
+
+import com.google.inject.Provider;
+
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-public abstract class AbstractFinder {
+public class MysqlFinderProvider implements Provider<Sql> {
+
+  private final JdbcSQLBuilderExec exec;
+
+  private final Provider<SQLBuilder> sqlProvider;
+
+  public MysqlFinderProvider(JdbcSQLBuilderExec exec, Provider<SQLBuilder> sqlProvider) {
+    this.exec = exec;
+    this.sqlProvider = sqlProvider;
+  }
+
+  @Override
+  public Sql get() {
+    SQLBuilder sql = sqlProvider.get();
+    return new SqlImpl(exec, sql);
+  }
 
 }

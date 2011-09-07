@@ -17,22 +17,17 @@ package br.com.objectos.comuns.relational.jdbc;
 
 import java.util.List;
 
-import br.com.objectos.comuns.relational.QueryExec;
-import br.com.objectos.comuns.relational.search.Page;
+import br.com.objectos.comuns.relational.search.HasSQLFunctions;
+import br.com.objectos.comuns.relational.search.SelectColumns;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class QueryExecJdbc implements QueryExec {
+public interface Sql extends HasSQLFunctions {
 
-  @Override
-  public <E> List<E> list(Class<?> entityClass) {
-    return null;
-  }
+  // subset of SQLBuider
+  SelectColumns select(String... columns);
 
-  @Override
-  public <E> List<E> listPage(Class<?> entityClass, Page page) {
-    return null;
-  }
+  <T> List<T> list(ResultSetLoader<T> loader);
 
 }

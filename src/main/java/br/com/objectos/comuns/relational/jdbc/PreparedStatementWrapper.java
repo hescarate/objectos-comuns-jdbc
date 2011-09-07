@@ -33,6 +33,8 @@ class PreparedStatementWrapper implements Stmt {
     this.stmt = stmt;
   }
 
+  // OK, this is a fine example where Scala would be just great... pg 176 of
+  // Programming in Scala 2nd ed... (or I think, can't memorize page numbers...)
   @Override
   public void setDate(int index, Date value) {
     try {

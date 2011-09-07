@@ -47,14 +47,7 @@ public class Insert {
 
   public Insert value(String colName, Object value) {
     int index = values.size() + 1;
-    ParamValue val; // so we never forget a if condition
-
-    if (value instanceof String) {
-      val = new ParamString(index, value);
-    } else {
-      val = new ParamObject(index, value);
-    }
-
+    ParamValue val = ParamValue.valueOf(index, value);
     values.put(colName, val);
     return this;
   }

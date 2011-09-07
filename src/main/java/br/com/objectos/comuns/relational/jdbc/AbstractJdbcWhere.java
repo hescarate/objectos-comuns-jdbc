@@ -41,6 +41,7 @@ abstract class AbstractJdbcWhere implements Where {
 
     CountingStatement stmt = (CountingStatement) source;
     configure(stmt);
+
     return stmt;
   }
 

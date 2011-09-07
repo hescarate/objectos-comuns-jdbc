@@ -53,7 +53,8 @@ public class C3P0DataSourceProvider implements Provider<ComboPooledDataSource> {
     } catch (PropertyVetoException e) {
 
       // it is the very first set for the driverClass
-      // on a side note: that is why immutability is cool.
+      // on a side note: that is why immutability is cool and the opposite
+      // (sometimes) is not.
 
     }
 
