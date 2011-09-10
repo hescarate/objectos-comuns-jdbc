@@ -68,7 +68,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>objectos-comuns-dbunit</artifactId>
-			<version>${project.version}</version>
+			<version>${objectos.comuns.dbunit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
