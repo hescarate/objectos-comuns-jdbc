@@ -20,15 +20,20 @@ import org.joda.time.LocalDate;
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamLocalDate extends ParamValue {
+class ParamLocalDate extends ParamValue<LocalDate> {
 
-  public ParamLocalDate(int index, Object value) {
+  public ParamLocalDate(int index, LocalDate value) {
     super(index, value);
   }
 
   @Override
-  void set(Stmt stmt) {
-    LocalDate date = (LocalDate) value;
+  int sqlType() {
+    return java.sql.Types.DATE;
+  }
+
+  @Override
+  void setValue(Stmt stmt) {
+    LocalDate date = value;
     stmt.setDate(index, date.toDate());
   }
 

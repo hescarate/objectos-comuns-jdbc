@@ -18,7 +18,6 @@ package br.com.objectos.comuns.relational.jdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */

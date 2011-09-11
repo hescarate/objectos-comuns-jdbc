@@ -15,26 +15,40 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.sql.Connection;
-
-import com.google.inject.Scopes;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-public class C3P0RelationalJdbcModule extends ObjectosComunsRelationalJdbcModule {
+public class TypeDouble extends AbstractType<Double> {
 
-  @Override
-  protected final void configure() {
-    super.configure();
+  public TypeDouble() {
+    super();
+  }
 
-    bind(ComboPooledDataSource.class).toProvider(C3P0DataSourceProvider.class).in(Scopes.SINGLETON);
+  public TypeDouble(Double value) {
+    super(value);
+  }
+
+  public TypeDouble(ResultSet rs) throws SQLException {
+    super(rs);
   }
 
   @Override
-  protected Class<? extends SQLProvider<Connection>> getConnectionProvider() {
-    return C3P0ConnectionProvider.class;
+  public String getTable() {
+    return "COMUNS_RELATIONAL.TYPE_DOUBLE";
+  }
+
+  @Override
+  Double getValue(ResultSet rs) throws SQLException {
+    double val = rs.getDouble("VALUE");
+    return rs.wasNull() ? null : val;
+  }
+
+  @Override
+  Insert setValue(Insert insert) {
+    return insert.value("VALUE", value);
   }
 
 }

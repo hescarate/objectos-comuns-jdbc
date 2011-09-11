@@ -31,9 +31,9 @@ class CountingStatement {
   }
 
   public void set(Object value) {
-    ParamValue val = ParamValue.valueOf(index++, value);
+    ParamValue<?> val = ParamValue.valueOf(index++, value);
     PreparedStatementWrapper stmt = new PreparedStatementWrapper(statement);
-    val.set(stmt);
+    val.setValue(stmt);
   }
 
 }

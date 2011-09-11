@@ -18,15 +18,20 @@ package br.com.objectos.comuns.relational.jdbc;
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamDouble extends ParamValue {
+class ParamDouble extends ParamValue<Double> {
 
-  public ParamDouble(int index, Object value) {
+  public ParamDouble(int index, Double value) {
     super(index, value);
   }
 
   @Override
-  void set(Stmt stmt) {
-    stmt.setDouble(index, (Double) value);
+  int sqlType() {
+    return java.sql.Types.DOUBLE;
+  }
+
+  @Override
+  void setValue(Stmt stmt) {
+    stmt.setDouble(index, value);
   }
 
 }

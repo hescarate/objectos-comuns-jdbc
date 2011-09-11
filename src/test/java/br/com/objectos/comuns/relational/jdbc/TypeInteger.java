@@ -15,23 +15,40 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamLong extends ParamValue<Long> {
+public class TypeInteger extends AbstractType<Integer> {
 
-  public ParamLong(int index, Long value) {
-    super(index, value);
+  public TypeInteger() {
+    super();
+  }
+
+  public TypeInteger(Integer value) {
+    super(value);
+  }
+
+  public TypeInteger(ResultSet rs) throws SQLException {
+    super(rs);
   }
 
   @Override
-  int sqlType() {
-    return java.sql.Types.BIGINT;
+  public String getTable() {
+    return "COMUNS_RELATIONAL.TYPE_INTEGER";
   }
 
   @Override
-  public void setValue(Stmt stmt) {
-    stmt.setLong(index, value);
+  Integer getValue(ResultSet rs) throws SQLException {
+    int val = rs.getInt("VALUE");
+    return rs.wasNull() ? null : val;
+  }
+
+  @Override
+  Insert setValue(Insert insert) {
+    return insert.value("VALUE", value);
   }
 
 }

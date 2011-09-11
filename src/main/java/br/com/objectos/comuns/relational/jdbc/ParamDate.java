@@ -15,20 +15,24 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.sql.Date;
-
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamDate extends ParamValue {
+class ParamDate extends ParamValue<java.util.Date> {
 
-  public ParamDate(int index, Object value) {
+  public ParamDate(int index, java.util.Date value) {
     super(index, value);
   }
 
   @Override
-  void set(Stmt stmt) {
-    stmt.setDate(index, (Date) value);
+  int sqlType() {
+    return java.sql.Types.TIMESTAMP;
+  }
+
+  @Override
+  void setValue(Stmt stmt) {
+    java.sql.Date sqlDate = new java.sql.Date(value.getTime());
+    stmt.setTimestamp(index, sqlDate);
   }
 
 }

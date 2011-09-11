@@ -20,15 +20,20 @@ import java.math.BigDecimal;
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamBigDecimal extends ParamValue {
+class ParamBigDecimal extends ParamValue<BigDecimal> {
 
-  public ParamBigDecimal(int index, Object value) {
+  public ParamBigDecimal(int index, BigDecimal value) {
     super(index, value);
   }
 
   @Override
-  void set(Stmt stmt) {
-    stmt.setBigDecimal(index, (BigDecimal) value);
+  int sqlType() {
+    return java.sql.Types.NUMERIC;
+  }
+
+  @Override
+  void setValue(Stmt stmt) {
+    stmt.setBigDecimal(index, value);
   }
 
 }

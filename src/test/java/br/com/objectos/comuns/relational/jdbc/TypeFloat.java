@@ -15,23 +15,40 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamLong extends ParamValue<Long> {
+public class TypeFloat extends AbstractType<Float> {
 
-  public ParamLong(int index, Long value) {
-    super(index, value);
+  public TypeFloat() {
+    super();
+  }
+
+  public TypeFloat(Float value) {
+    super(value);
+  }
+
+  public TypeFloat(ResultSet rs) throws SQLException {
+    super(rs);
   }
 
   @Override
-  int sqlType() {
-    return java.sql.Types.BIGINT;
+  public String getTable() {
+    return "COMUNS_RELATIONAL.TYPE_FLOAT";
   }
 
   @Override
-  public void setValue(Stmt stmt) {
-    stmt.setLong(index, value);
+  Float getValue(ResultSet rs) throws SQLException {
+    float val = rs.getFloat("VALUE");
+    return rs.wasNull() ? null : val;
+  }
+
+  @Override
+  Insert setValue(Insert insert) {
+    return insert.value("VALUE", value);
   }
 
 }

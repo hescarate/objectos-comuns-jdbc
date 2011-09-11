@@ -15,18 +15,34 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import java.lang.reflect.Constructor;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.google.common.base.Throwables;
+
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamObject extends ParamValue {
+public class ReflectionLoader<T> implements ResultSetLoader<T> {
 
-  public ParamObject(int index, Object value) {
-    super(index, value);
+  private final Class<? extends T> entityClass;
+
+  public ReflectionLoader(Class<? extends T> entityClass) {
+    this.entityClass = entityClass;
   }
 
   @Override
-  public void set(Stmt stmt) {
-    stmt.setObject(index, value);
+  public T load(ResultSet rs) throws SQLException {
+    try {
+
+      Constructor<? extends T> constructor = entityClass.getConstructor(ResultSet.class);
+      return constructor.newInstance(rs);
+
+    } catch (Exception e) {
+      throw Throwables.propagate(e);
+
+    }
   }
 
 }

@@ -23,7 +23,10 @@ import java.util.Date;
  */
 public interface Stmt {
 
+  void setNull(int index, int sqlType);
+
   void setDate(int index, Date value);
+  void setTimestamp(int index, Date value);
 
   void setString(int index, String value);
 

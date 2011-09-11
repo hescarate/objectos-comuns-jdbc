@@ -18,15 +18,20 @@ package br.com.objectos.comuns.relational.jdbc;
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamFloat extends ParamValue {
+class ParamFloat extends ParamValue<Float> {
 
-  public ParamFloat(int index, Object value) {
+  public ParamFloat(int index, Float value) {
     super(index, value);
   }
 
   @Override
-  void set(Stmt stmt) {
-    stmt.setFloat(index, (Float) value);
+  int sqlType() {
+    return java.sql.Types.FLOAT;
+  }
+
+  @Override
+  void setValue(Stmt stmt) {
+    stmt.setFloat(index, value);
   }
 
 }

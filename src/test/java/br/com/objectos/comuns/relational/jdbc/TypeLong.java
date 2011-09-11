@@ -15,28 +15,40 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import java.sql.Connection;
-
-import br.com.objectos.comuns.relational.BatchInsert;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
-import com.google.inject.throwingproviders.ThrowingProviderBinder;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-abstract class ObjectosComunsRelationalJdbcModule extends AbstractModule {
+public class TypeLong extends AbstractType<Long> {
 
-  @Override
-  protected void configure() {
-    bind(BatchInsert.class).to(BatchInsertJdbc.class).in(Scopes.SINGLETON);
-
-    ThrowingProviderBinder.create(binder()) //
-        .bind(SQLProvider.class, Connection.class) //
-        .to(getConnectionProvider());
+  public TypeLong() {
+    super();
   }
 
-  protected abstract Class<? extends SQLProvider<Connection>> getConnectionProvider();
+  public TypeLong(Long value) {
+    super(value);
+  }
+
+  public TypeLong(ResultSet rs) throws SQLException {
+    super(rs);
+  }
+
+  @Override
+  public String getTable() {
+    return "COMUNS_RELATIONAL.TYPE_BIGINT";
+  }
+
+  @Override
+  Long getValue(ResultSet rs) throws SQLException {
+    long val = rs.getLong("VALUE");
+    return rs.wasNull() ? null : val;
+  }
+
+  @Override
+  Insert setValue(Insert insert) {
+    return insert.value("VALUE", value);
+  }
 
 }

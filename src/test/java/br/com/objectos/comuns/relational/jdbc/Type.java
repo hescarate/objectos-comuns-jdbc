@@ -18,20 +18,11 @@ package br.com.objectos.comuns.relational.jdbc;
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamLong extends ParamValue<Long> {
+public interface Type<T> extends Insertable {
 
-  public ParamLong(int index, Long value) {
-    super(index, value);
-  }
+  String getTable();
+  ResultSetLoader<Type<T>> getLoader();
 
-  @Override
-  int sqlType() {
-    return java.sql.Types.BIGINT;
-  }
-
-  @Override
-  public void setValue(Stmt stmt) {
-    stmt.setLong(index, value);
-  }
+  T getValue();
 
 }

@@ -17,11 +17,15 @@ package br.com.objectos.comuns.relational.jdbc;
 
 import static com.google.common.collect.Maps.newLinkedHashMap;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
@@ -35,7 +39,7 @@ public class Insert {
 
   private final String table;
 
-  private final Map<String, ParamValue> values = newLinkedHashMap();
+  private final Map<String, ParamValue<?>> values = newLinkedHashMap();
 
   private GeneratedKeyCallback keyCallback;
 
@@ -47,11 +51,40 @@ public class Insert {
     return new Insert(table);
   }
 
-  public Insert value(String colName, Object value) {
-    int index = values.size() + 1;
-    ParamValue val = ParamValue.valueOf(index, value);
-    values.put(colName, val);
-    return this;
+  public Insert value(String colName, BigDecimal value) {
+    return addValue(colName, new ParamBigDecimal(next(), value));
+  }
+
+  public Insert value(String colName, java.util.Date value) {
+    return addValue(colName, new ParamDate(next(), value));
+  }
+
+  public Insert value(String colName, DateTime value) {
+    return addValue(colName, new ParamDateTime(next(), value));
+  }
+
+  public Insert value(String colName, Double value) {
+    return addValue(colName, new ParamDouble(next(), value));
+  }
+
+  public Insert value(String colName, Float value) {
+    return addValue(colName, new ParamFloat(next(), value));
+  }
+
+  public Insert value(String colName, Integer value) {
+    return addValue(colName, new ParamInt(next(), value));
+  }
+
+  public Insert value(String colName, LocalDate value) {
+    return addValue(colName, new ParamLocalDate(next(), value));
+  }
+
+  public Insert value(String colName, Long value) {
+    return addValue(colName, new ParamLong(next(), value));
+  }
+
+  public Insert value(String colName, String value) {
+    return addValue(colName, new ParamString(next(), value));
   }
 
   public Insert onGeneratedKey(GeneratedKeyCallback callback) {
@@ -60,16 +93,12 @@ public class Insert {
   }
 
   public void prepare(Stmt stmt) {
-    Collection<ParamValue> vals = values.values();
-    List<ParamValue> params = ImmutableList.copyOf(vals);
+    Collection<ParamValue<?>> vals = values.values();
+    List<ParamValue<?>> params = ImmutableList.copyOf(vals);
 
-    for (ParamValue param : params) {
+    for (ParamValue<?> param : params) {
       param.set(stmt);
     }
-  }
-
-  GeneratedKeyCallback getKeyCallback() {
-    return keyCallback;
   }
 
   @Override
@@ -83,6 +112,19 @@ public class Insert {
     String args = Joiner.on(", ").join(argArr);
 
     return String.format("INSERT INTO %s (%s) VALUES (%s)", table, columns, args);
+  }
+
+  GeneratedKeyCallback getKeyCallback() {
+    return keyCallback;
+  }
+
+  private int next() {
+    return values.size() + 1;
+  }
+
+  private Insert addValue(String colName, ParamValue<?> val) {
+    values.put(colName, val);
+    return this;
   }
 
   private class ColumnEscaper implements Function<String, String> {

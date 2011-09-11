@@ -15,23 +15,39 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamLong extends ParamValue<Long> {
+public class TypeStringVarchar extends AbstractType<String> {
 
-  public ParamLong(int index, Long value) {
-    super(index, value);
+  public TypeStringVarchar() {
+    super();
+  }
+
+  public TypeStringVarchar(ResultSet rs) throws SQLException {
+    super(rs);
+  }
+
+  public TypeStringVarchar(String value) {
+    super(value);
   }
 
   @Override
-  int sqlType() {
-    return java.sql.Types.BIGINT;
+  public String getTable() {
+    return "COMUNS_RELATIONAL.TYPE_VARCHAR";
   }
 
   @Override
-  public void setValue(Stmt stmt) {
-    stmt.setLong(index, value);
+  String getValue(ResultSet rs) throws SQLException {
+    return rs.getString("VALUE");
+  }
+
+  @Override
+  Insert setValue(Insert insert) {
+    return insert.value("VALUE", value);
   }
 
 }

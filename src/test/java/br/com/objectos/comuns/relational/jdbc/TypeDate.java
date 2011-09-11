@@ -15,23 +15,42 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
+
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamLong extends ParamValue<Long> {
+public class TypeDate extends AbstractType<Date> {
 
-  public ParamLong(int index, Long value) {
-    super(index, value);
+  public TypeDate() {
+    super();
+  }
+
+  public TypeDate(Date value) {
+    super(value);
+  }
+
+  public TypeDate(ResultSet rs) throws SQLException {
+    super(rs);
   }
 
   @Override
-  int sqlType() {
-    return java.sql.Types.BIGINT;
+  public String getTable() {
+    return "COMUNS_RELATIONAL.TYPE_DATETIME";
   }
 
   @Override
-  public void setValue(Stmt stmt) {
-    stmt.setLong(index, value);
+  Date getValue(ResultSet rs) throws SQLException {
+    Timestamp stamp = rs.getTimestamp("VALUE");
+    return stamp != null ? new Date(stamp.getTime()) : null;
+  }
+
+  @Override
+  Insert setValue(Insert insert) {
+    return insert.value("VALUE", value);
   }
 
 }

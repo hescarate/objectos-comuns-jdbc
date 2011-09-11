@@ -15,23 +15,43 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.joda.time.LocalDate;
+
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamLong extends ParamValue<Long> {
+public class TypeLocalDate extends AbstractType<LocalDate> {
 
-  public ParamLong(int index, Long value) {
-    super(index, value);
+  public TypeLocalDate() {
+    super();
+  }
+
+  public TypeLocalDate(LocalDate value) {
+    super(value);
+  }
+
+  public TypeLocalDate(ResultSet rs) throws SQLException {
+    super(rs);
   }
 
   @Override
-  int sqlType() {
-    return java.sql.Types.BIGINT;
+  public String getTable() {
+    return "COMUNS_RELATIONAL.TYPE_DATE";
   }
 
   @Override
-  public void setValue(Stmt stmt) {
-    stmt.setLong(index, value);
+  LocalDate getValue(ResultSet rs) throws SQLException {
+    Date date = rs.getDate("VALUE");
+    return date != null ? new LocalDate(date) : null;
+  }
+
+  @Override
+  Insert setValue(Insert insert) {
+    return insert.value("VALUE", value);
   }
 
 }

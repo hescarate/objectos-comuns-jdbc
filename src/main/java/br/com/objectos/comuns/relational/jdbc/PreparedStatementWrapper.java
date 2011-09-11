@@ -36,10 +36,29 @@ class PreparedStatementWrapper implements Stmt {
   // OK, this is a fine example where Scala would be just great... pg 176 of
   // Programming in Scala 2nd ed... (or I think, can't memorize page numbers...)
   @Override
+  public void setNull(int index, int sqlType) {
+    try {
+      stmt.setNull(index, sqlType);
+    } catch (SQLException e) {
+      throw Throwables.propagate(e);
+    }
+  }
+
+  @Override
   public void setDate(int index, Date value) {
     try {
       java.sql.Date sql = value != null ? new java.sql.Date(value.getTime()) : null;
       stmt.setDate(index, sql);
+    } catch (SQLException e) {
+      throw Throwables.propagate(e);
+    }
+  }
+
+  @Override
+  public void setTimestamp(int index, Date value) {
+    try {
+      java.sql.Timestamp sql = value != null ? new java.sql.Timestamp(value.getTime()) : null;
+      stmt.setTimestamp(index, sql);
     } catch (SQLException e) {
       throw Throwables.propagate(e);
     }

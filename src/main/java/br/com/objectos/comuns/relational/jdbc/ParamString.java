@@ -18,15 +18,20 @@ package br.com.objectos.comuns.relational.jdbc;
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamString extends ParamValue {
+class ParamString extends ParamValue<String> {
 
-  public ParamString(int index, Object value) {
+  public ParamString(int index, String value) {
     super(index, value);
   }
 
   @Override
-  public void set(Stmt stmt) {
-    stmt.setString(index, (String) value);
+  int sqlType() {
+    return java.sql.Types.VARCHAR;
+  }
+
+  @Override
+  public void setValue(Stmt stmt) {
+    stmt.setString(index, value);
   }
 
 }

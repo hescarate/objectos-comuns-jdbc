@@ -20,16 +20,21 @@ import org.joda.time.DateTime;
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class ParamDateTime extends ParamValue {
+class ParamDateTime extends ParamValue<DateTime> {
 
-  public ParamDateTime(int index, Object value) {
+  public ParamDateTime(int index, DateTime value) {
     super(index, value);
   }
 
   @Override
-  void set(Stmt stmt) {
-    DateTime dateTime = (DateTime) value;
-    stmt.setDate(index, dateTime.toDate());
+  int sqlType() {
+    return java.sql.Types.TIMESTAMP;
+  }
+
+  @Override
+  void setValue(Stmt stmt) {
+    DateTime dateTime = value;
+    stmt.setTimestamp(index, dateTime.toDate());
   }
 
 }

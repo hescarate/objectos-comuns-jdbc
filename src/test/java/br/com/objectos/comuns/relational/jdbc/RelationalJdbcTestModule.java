@@ -27,14 +27,16 @@ public class RelationalJdbcTestModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    install(new C3P0RelationalJdbcModule());
-
     PropertiesJdbcCredentialsProvider credentials;
     credentials = new PropertiesJdbcCredentialsProvider(getClass());
 
     install(new DbunitModuleBuilder() //
         .jdbc(credentials) //
         .withMysql() //
+        .build());
+
+    install(new RelationalJdbcModuleBuilder() //
+        .withC3P0(credentials) //
         .build());
   }
 
