@@ -48,7 +48,20 @@ class BatchInsertJdbc implements BatchInsert {
   }
 
   @Override
-  public void of(Object entity) {
+  public void of(final Object entity) {
+    execute(new WithConnection() {
+      @Override
+      void tryToExecute(Connection conn) throws SQLException {
+
+        Preconditions.checkArgument(entity instanceof Insertable,
+            "Entity must be instanceof Insertable.");
+        Insertable insertable = (Insertable) entity;
+        Insert insert = insertable.getInsert();
+
+        insertSingle(conn, insert);
+
+      }
+    });
   }
 
   @Override
@@ -58,50 +71,75 @@ class BatchInsertJdbc implements BatchInsert {
   }
 
   @Override
-  public void allOf(Iterator<?> entities) {
-    Connection conn = null;
+  public void allOf(final Iterator<?> entities) {
+    execute(new WithConnection() {
+      @Override
+      void tryToExecute(Connection conn) throws SQLException {
 
-    try {
-      conn = connections.get();
-      conn.setAutoCommit(false);
+        Iterator<Insert> inserts = Iterators.transform(entities, new ToInsert());
 
-      Iterator<Insert> inserts = Iterators.transform(entities, new ToInsert());
-
-      while (inserts.hasNext()) {
-        Insert insert = inserts.next();
-        String sql = insert.toString();
-        PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-        Stmt stmt = new PreparedStatementWrapper(statement);
-        insert.prepare(stmt);
-
-        statement.executeUpdate();
-
-        GeneratedKeyCallback keyCallback = insert.getKeyCallback();
-        if (keyCallback != null) {
-          ResultSet rs = statement.getGeneratedKeys();
-          keyCallback.set(rs);
-          rs.close();
+        while (inserts.hasNext()) {
+          Insert insert = inserts.next();
+          insertSingle(conn, insert);
         }
-      }
 
-      conn.commit();
-    } catch (SQLException e) {
-      try {
-        conn.rollback();
-      } catch (SQLException e1) {
-        logger.error("Could not properly rollback the transaction.", e);
       }
-      throw new RelationalException("Could not insert entities. More info below.", e);
-    } finally {
-      if (conn != null) {
+    });
+  }
+
+  private void execute(WithConnection withConnection) {
+    withConnection.execute();
+  }
+
+  private void insertSingle(Connection conn, Insert insert) throws SQLException {
+    String sql = insert.toString();
+    PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+    Stmt stmt = new PreparedStatementWrapper(statement);
+    insert.prepare(stmt);
+
+    statement.executeUpdate();
+
+    GeneratedKeyCallback keyCallback = insert.getKeyCallback();
+    if (keyCallback != null) {
+      ResultSet rs = statement.getGeneratedKeys();
+      keyCallback.set(rs);
+      rs.close();
+    }
+  }
+
+  private abstract class WithConnection {
+
+    private Connection conn;
+
+    public final void execute() {
+      try {
+        conn = connections.get();
+        conn.setAutoCommit(false);
+
+        tryToExecute(conn);
+
+        conn.commit();
+      } catch (SQLException e) {
         try {
-          conn.close();
-        } catch (SQLException e) {
-          logger.error("Could not properly close the connection.", e);
+          conn.rollback();
+        } catch (SQLException e1) {
+          logger.error("Could not properly rollback the transaction.", e);
+        }
+        throw new RelationalException("Could not insert entities. More info below.", e);
+      } finally {
+        if (conn != null) {
+          try {
+            conn.close();
+          } catch (SQLException e) {
+            logger.error("Could not properly close the connection.", e);
+          }
         }
       }
     }
+
+    abstract void tryToExecute(Connection conn) throws SQLException;
+
   }
 
   private class ToInsert implements Function<Object, Insert> {

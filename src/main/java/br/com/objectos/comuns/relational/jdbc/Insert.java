@@ -23,8 +23,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
@@ -73,13 +75,21 @@ public class Insert {
   @Override
   public String toString() {
     Set<String> keys = values.keySet();
-    String columns = Joiner.on(", ").join(keys);
+    Iterable<String> escapedCols = Iterables.transform(keys, new ColumnEscaper());
+    String columns = Joiner.on(", ").join(escapedCols);
 
     Object[] argArr = new Object[keys.size()];
     Arrays.fill(argArr, "?");
     String args = Joiner.on(", ").join(argArr);
 
     return String.format("INSERT INTO %s (%s) VALUES (%s)", table, columns, args);
+  }
+
+  private class ColumnEscaper implements Function<String, String> {
+    @Override
+    public String apply(String input) {
+      return '`' + input + '`';
+    }
   }
 
 }

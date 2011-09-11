@@ -15,13 +15,10 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import br.com.objectos.comuns.sql.JdbcCredentials;
-import br.com.objectos.comuns.sql.JdbcCredentialsBuilder;
-import br.com.objectos.comuns.testing.dbunit.DatabaseTesterModuleBuilder;
-import br.com.objectos.comuns.testing.dbunit.ObjectosComunsDbunitModule;
+import br.com.objectos.comuns.sql.PropertiesJdbcCredentialsProvider;
+import br.com.objectos.comuns.testing.dbunit.DbunitModuleBuilder;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
@@ -32,24 +29,13 @@ public class RelationalJdbcTestModule extends AbstractModule {
   protected void configure() {
     install(new C3P0RelationalJdbcModule());
 
-    JdbcCredentials credentials = getCredentials();
+    PropertiesJdbcCredentialsProvider credentials;
+    credentials = new PropertiesJdbcCredentialsProvider(getClass());
 
-    install(new ObjectosComunsDbunitModule());
-    install(new DatabaseTesterModuleBuilder() //
+    install(new DbunitModuleBuilder() //
         .jdbc(credentials) //
         .withMysql() //
         .build());
-  }
-
-  @Provides
-  @C3P0
-  public JdbcCredentials getCredentials() {
-    return new JdbcCredentialsBuilder() //
-        .driverClass("com.mysql.jdbc.Driver") //
-        .url("jdbc:mysql://localhost/COMUNS_RELATIONAL") //
-        .user("tatu") //
-        .password("tatu") //
-        .get();
   }
 
 }

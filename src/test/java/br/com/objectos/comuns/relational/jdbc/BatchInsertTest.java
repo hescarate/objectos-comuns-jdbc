@@ -85,6 +85,16 @@ public class BatchInsertTest {
     assertThat(ids.get(1), notNullValue());
   }
 
+  public void single_insert_should_work_properly() {
+    Simple s0 = new Simple("A");
+
+    batchInsert.of(s0);
+
+    List<Simple> r = findAll();
+    assertThat(r.size(), equalTo(1));
+    assertThat(r.get(0).getString(), equalTo("A"));
+  }
+
   private List<Simple> findAll() {
     MysqlSQLBuilder sql = new MysqlSQLBuilder();
     sql.select("*").from("COMUNS_RELATIONAL.SIMPLE");
