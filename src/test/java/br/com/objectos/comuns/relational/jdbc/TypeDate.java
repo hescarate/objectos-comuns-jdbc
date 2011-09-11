@@ -53,4 +53,17 @@ public class TypeDate extends AbstractType<Date> {
     return insert.value("VALUE", value);
   }
 
+  @Override
+  public boolean equals(Object other) {
+    boolean eq = false;
+
+    if (other instanceof TypeDate) {
+      TypeDate that = (TypeDate) other;
+      eq = this.value == null && that.value == null;
+      eq = eq || Math.abs(that.value.getTime() - value.getTime()) < 1000;
+    }
+
+    return eq;
+  }
+
 }

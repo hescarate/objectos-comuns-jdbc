@@ -54,4 +54,17 @@ public class TypeDateTime extends AbstractType<DateTime> {
     return insert.value("VALUE", value);
   }
 
+  @Override
+  public boolean equals(Object other) {
+    boolean eq = false;
+
+    if (other instanceof TypeDateTime) {
+      TypeDateTime that = (TypeDateTime) other;
+      eq = this.value == null && that.value == null;
+      eq = eq || Math.abs(that.value.getMillis() - value.getMillis()) < 1000;
+    }
+
+    return eq;
+  }
+
 }

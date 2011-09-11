@@ -15,6 +15,14 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+
+import com.google.common.base.Preconditions;
+
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
@@ -45,42 +53,43 @@ abstract class ParamValue<T> {
   abstract void setValue(Stmt stmt);
 
   public static ParamValue<?> valueOf(int index, Object value) {
-    // ParamValue val; // so we never forget a if condition
-    //
-    // if (value instanceof BigDecimal) {
-    // val = new ParamBigDecimal(index, value);
-    //
-    // } else if (value instanceof Date) {
-    // val = new ParamDate(index, value);
-    //
-    // } else if (value instanceof DateTime) {
-    // val = new ParamDateTime(index, value);
-    //
-    // } else if (value instanceof Double) {
-    // val = new ParamDouble(index, value);
-    //
-    // } else if (value instanceof Float) {
-    // val = new ParamFloat(index, value);
-    //
-    // } else if (value instanceof Integer) {
-    // val = new ParamInt(index, value);
-    //
-    // } else if (value instanceof LocalDate) {
-    // val = new ParamLocalDate(index, value);
-    //
-    // } else if (value instanceof Long) {
-    // val = new ParamLong(index, value);
-    //
-    // } else if (value instanceof String) {
-    // val = new ParamString(index, value);
-    //
-    // } else {
-    // val = new ParamObject(index, value);
-    //
-    // }
-    //
-    // return val;
-    throw new UnsupportedOperationException();
+    Preconditions.checkNotNull(value, "Cannot treat null values this way.");
+
+    ParamValue<?> val; // so we never forget a if condition
+
+    if (value instanceof BigDecimal) {
+      val = new ParamBigDecimal(index, (BigDecimal) value);
+
+    } else if (value instanceof Date) {
+      val = new ParamDate(index, (Date) value);
+
+    } else if (value instanceof DateTime) {
+      val = new ParamDateTime(index, (DateTime) value);
+
+    } else if (value instanceof Double) {
+      val = new ParamDouble(index, (Double) value);
+
+    } else if (value instanceof Float) {
+      val = new ParamFloat(index, (Float) value);
+
+    } else if (value instanceof Integer) {
+      val = new ParamInt(index, (Integer) value);
+
+    } else if (value instanceof LocalDate) {
+      val = new ParamLocalDate(index, (LocalDate) value);
+
+    } else if (value instanceof Long) {
+      val = new ParamLong(index, (Long) value);
+
+    } else if (value instanceof String) {
+      val = new ParamString(index, (String) value);
+
+    } else {
+      throw new UnsupportedOperationException("Don't know how to treat typeof " + value.getClass());
+
+    }
+
+    return val;
   }
 
 }
