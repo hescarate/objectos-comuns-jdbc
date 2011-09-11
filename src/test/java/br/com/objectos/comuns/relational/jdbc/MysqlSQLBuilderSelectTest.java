@@ -29,6 +29,7 @@ import br.com.objectos.comuns.testing.dbunit.DBUnit;
 
 import com.google.common.base.Functions;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
@@ -38,10 +39,10 @@ import com.google.inject.Inject;
 public class MysqlSQLBuilderSelectTest {
 
   @Inject
-  private JdbcSQLBuilderExec exec;
+  private DBUnit dbunit;
 
   @Inject
-  private DBUnit dbunit;
+  private Provider<Sql> sqlProvider;
 
   private final ResultSetLoader<Simple> entityLoader = new SimpleEntityLoader();
 
@@ -52,11 +53,11 @@ public class MysqlSQLBuilderSelectTest {
   }
 
   public void select_columns_should_return_records() {
-    MysqlSQLBuilder sql = new MysqlSQLBuilder();
+    Sql sql = sqlProvider.get();
     sql.select("*").from("COMUNS_RELATIONAL.SIMPLE");
     sql.order("ID").ascending();
 
-    List<Simple> result = exec.list(entityLoader, sql);
+    List<Simple> result = sql.list(entityLoader);
 
     assertThat(result.size(), equalTo(3));
 
@@ -67,11 +68,11 @@ public class MysqlSQLBuilderSelectTest {
   }
 
   public void select_with_explicit_column_names_should_be_ok() {
-    MysqlSQLBuilder sql = new MysqlSQLBuilder();
+    Sql sql = sqlProvider.get();
     sql.select("ID", "STRING").from("COMUNS_RELATIONAL.SIMPLE");
     sql.order("ID").ascending();
 
-    List<Simple> result = exec.list(entityLoader, sql);
+    List<Simple> result = sql.list(entityLoader);
 
     assertThat(result.size(), equalTo(3));
 
@@ -82,11 +83,11 @@ public class MysqlSQLBuilderSelectTest {
   }
 
   public void ordering_ascending_should_be_ok() {
-    MysqlSQLBuilder sql = new MysqlSQLBuilder();
+    Sql sql = sqlProvider.get();
     sql.select("ID", "STRING").from("COMUNS_RELATIONAL.SIMPLE");
     sql.order("STRING").ascending();
 
-    List<Simple> result = exec.list(entityLoader, sql);
+    List<Simple> result = sql.list(entityLoader);
 
     assertThat(result.size(), equalTo(3));
 
@@ -97,11 +98,11 @@ public class MysqlSQLBuilderSelectTest {
   }
 
   public void ordering_descending_should_be_ok() {
-    MysqlSQLBuilder sql = new MysqlSQLBuilder();
+    Sql sql = sqlProvider.get();
     sql.select("ID", "STRING").from("COMUNS_RELATIONAL.SIMPLE");
     sql.order("STRING").descending();
 
-    List<Simple> result = exec.list(entityLoader, sql);
+    List<Simple> result = sql.list(entityLoader);
 
     assertThat(result.size(), equalTo(3));
 
@@ -112,10 +113,10 @@ public class MysqlSQLBuilderSelectTest {
   }
 
   public void sum_aggregate_should_be_ok() {
-    MysqlSQLBuilder sql = new MysqlSQLBuilder();
+    Sql sql = sqlProvider.get();
     sql.select("sum(ID)").from("COMUNS_RELATIONAL.SIMPLE");
 
-    List<Long> result = exec.list(new LongLoader(), sql);
+    List<Long> result = sql.list(new LongLoader());
 
     assertThat(result.size(), equalTo(1));
     assertThat(result.get(0), equalTo(Long.valueOf(1 + 2 + 3)));

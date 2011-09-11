@@ -27,6 +27,7 @@ import org.testng.annotations.Test;
 import br.com.objectos.comuns.testing.dbunit.DBUnit;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
@@ -36,12 +37,12 @@ import com.google.inject.Inject;
 public class MysqlSQLBuilderWhereTest {
 
   @Inject
-  private JdbcSQLBuilderExec exec;
-
-  @Inject
   private DBUnit dbunit;
 
-  private MysqlSQLBuilder sql;
+  @Inject
+  private Provider<Sql> sqlProvider;
+
+  private Sql sql;
   private final ResultSetLoader<Simple> entityLoader = new SimpleEntityLoader();
 
   @BeforeMethod
@@ -49,7 +50,7 @@ public class MysqlSQLBuilderWhereTest {
     dbunit.load(new MiniComunsJdbcTruncateXml());
     dbunit.load(new MiniComunsJdbcXml());
 
-    sql = new MysqlSQLBuilder();
+    sql = sqlProvider.get();
     sql.select("*").from("COMUNS_RELATIONAL.SIMPLE");
     sql.order("ID").ascending();
   }
@@ -57,7 +58,7 @@ public class MysqlSQLBuilderWhereTest {
   public void equal_to() {
     sql.where("STRING").equalTo("CDE");
 
-    List<Simple> result = exec.list(entityLoader, sql);
+    List<Simple> result = sql.list(entityLoader);
 
     assertThat(result.size(), equalTo(1));
     assertThat(result.get(0).toString(), equalTo("Simple{id=1, string=CDE}"));
@@ -66,7 +67,7 @@ public class MysqlSQLBuilderWhereTest {
   public void like() {
     sql.where("STRING").like("D");
 
-    List<Simple> result = exec.list(entityLoader, sql);
+    List<Simple> result = sql.list(entityLoader);
 
     assertThat(result.size(), equalTo(2));
     assertThat(result.get(0).toString(), equalTo("Simple{id=1, string=CDE}"));
@@ -76,7 +77,7 @@ public class MysqlSQLBuilderWhereTest {
   public void starts_with() {
     sql.where("STRING").startsWith("C");
 
-    List<Simple> result = exec.list(entityLoader, sql);
+    List<Simple> result = sql.list(entityLoader);
 
     assertThat(result.size(), equalTo(1));
     assertThat(result.get(0).toString(), equalTo("Simple{id=1, string=CDE}"));
@@ -85,7 +86,7 @@ public class MysqlSQLBuilderWhereTest {
   public void ends_with() {
     sql.where("STRING").endsWith("E");
 
-    List<Simple> result = exec.list(entityLoader, sql);
+    List<Simple> result = sql.list(entityLoader);
 
     assertThat(result.size(), equalTo(1));
     assertThat(result.get(0).toString(), equalTo("Simple{id=1, string=CDE}"));
@@ -94,7 +95,7 @@ public class MysqlSQLBuilderWhereTest {
   public void gt() {
     sql.where("ID").gt(2);
 
-    List<Simple> result = exec.list(entityLoader, sql);
+    List<Simple> result = sql.list(entityLoader);
 
     assertThat(result.size(), equalTo(1));
     assertThat(result.get(0).toString(), equalTo("Simple{id=3, string=ABC}"));
@@ -103,7 +104,7 @@ public class MysqlSQLBuilderWhereTest {
   public void ge() {
     sql.where("ID").ge(2);
 
-    List<Simple> result = exec.list(entityLoader, sql);
+    List<Simple> result = sql.list(entityLoader);
 
     assertThat(result.size(), equalTo(2));
     assertThat(result.get(0).toString(), equalTo("Simple{id=2, string=BCD}"));
@@ -113,7 +114,7 @@ public class MysqlSQLBuilderWhereTest {
   public void lt() {
     sql.where("ID").lt(2);
 
-    List<Simple> result = exec.list(entityLoader, sql);
+    List<Simple> result = sql.list(entityLoader);
 
     assertThat(result.size(), equalTo(1));
     assertThat(result.get(0).toString(), equalTo("Simple{id=1, string=CDE}"));
@@ -122,7 +123,7 @@ public class MysqlSQLBuilderWhereTest {
   public void le() {
     sql.where("ID").le(2);
 
-    List<Simple> result = exec.list(entityLoader, sql);
+    List<Simple> result = sql.list(entityLoader);
 
     assertThat(result.size(), equalTo(2));
     assertThat(result.get(0).toString(), equalTo("Simple{id=1, string=CDE}"));

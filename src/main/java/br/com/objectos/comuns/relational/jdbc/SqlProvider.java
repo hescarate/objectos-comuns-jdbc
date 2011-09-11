@@ -17,6 +17,7 @@ package br.com.objectos.comuns.relational.jdbc;
 
 import br.com.objectos.comuns.relational.search.SQLBuilder;
 
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 /**
@@ -28,6 +29,7 @@ class SqlProvider implements Provider<Sql> {
 
   private final Provider<SQLBuilder> sqlProvider;
 
+  @Inject
   public SqlProvider(JdbcSQLBuilderExec exec, Provider<SQLBuilder> sqlProvider) {
     this.exec = exec;
     this.sqlProvider = sqlProvider;

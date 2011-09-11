@@ -29,6 +29,8 @@ class RelationalJdbcBaseModule extends AbstractModule {
   protected void configure() {
     bind(BatchInsert.class).to(BatchInsertJdbc.class).in(Scopes.SINGLETON);
 
+    bind(JdbcSQLBuilderExec.class).to(JdbcSQLBuilderExecGuice.class);
+
     bind(Sql.class).toProvider(SqlProvider.class);
   }
 

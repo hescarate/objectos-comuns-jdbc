@@ -37,6 +37,7 @@ public class RelationalJdbcTestModule extends AbstractModule {
 
     install(new RelationalJdbcModuleBuilder() //
         .withC3P0(credentials) //
+        .withMysql() //
         .build());
   }
 

@@ -45,7 +45,7 @@ public class RelationalJdbcModuleBuilder {
       this.credentials = credentials;
     }
 
-    public WithC3P0Builder withMySQL() {
+    public WithC3P0Builder withMysql() {
       vendor = Vendor.MYSQL;
       return this;
     }
