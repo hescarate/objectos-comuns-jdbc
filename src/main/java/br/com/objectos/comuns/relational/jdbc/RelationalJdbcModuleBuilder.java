@@ -17,7 +17,6 @@ package br.com.objectos.comuns.relational.jdbc;
 
 import java.sql.Connection;
 
-import br.com.objectos.comuns.relational.BatchInsert;
 import br.com.objectos.comuns.sql.JdbcCredentials;
 
 import com.google.inject.AbstractModule;
@@ -32,6 +31,8 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  */
 public class RelationalJdbcModuleBuilder {
 
+  private Vendor vendor = Vendor.ANSI;
+
   public WithC3P0Builder withC3P0(Provider<JdbcCredentials> credentials) {
     return new WithC3P0Builder(credentials);
   }
@@ -42,6 +43,11 @@ public class RelationalJdbcModuleBuilder {
 
     public WithC3P0Builder(Provider<JdbcCredentials> credentials) {
       this.credentials = credentials;
+    }
+
+    public WithC3P0Builder withMySQL() {
+      vendor = Vendor.MYSQL;
+      return this;
     }
 
     public Module build() {
@@ -57,18 +63,12 @@ public class RelationalJdbcModuleBuilder {
               .bind(SQLProvider.class, Connection.class) //
               .to(C3P0ConnectionProvider.class);
 
-          install(new CommonsModule());
+          install(new RelationalJdbcBaseModule());
+          install(vendor.getModule());
         }
       };
     }
 
-  }
-
-  private static class CommonsModule extends AbstractModule {
-    @Override
-    protected void configure() {
-      bind(BatchInsert.class).to(BatchInsertJdbc.class).in(Scopes.SINGLETON);
-    }
   }
 
 }

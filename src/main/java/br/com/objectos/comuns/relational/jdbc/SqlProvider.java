@@ -22,13 +22,13 @@ import com.google.inject.Provider;
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-public class MysqlFinderProvider implements Provider<Sql> {
+class SqlProvider implements Provider<Sql> {
 
   private final JdbcSQLBuilderExec exec;
 
   private final Provider<SQLBuilder> sqlProvider;
 
-  public MysqlFinderProvider(JdbcSQLBuilderExec exec, Provider<SQLBuilder> sqlProvider) {
+  public SqlProvider(JdbcSQLBuilderExec exec, Provider<SQLBuilder> sqlProvider) {
     this.exec = exec;
     this.sqlProvider = sqlProvider;
   }
