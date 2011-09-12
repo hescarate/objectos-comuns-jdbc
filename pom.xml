@@ -20,7 +20,7 @@
 		<jdbc.user>tatu</jdbc.user>
 		<jdbc.password>tatu</jdbc.password>
 		<objectos.comuns.base.version>2.0.2</objectos.comuns.base.version>
-		<objectos.comuns.dbunit.version>2.0.1</objectos.comuns.dbunit.version>
+		<objectos.comuns.dbunit.version>2.0.2</objectos.comuns.dbunit.version>
 		<objectos.comuns.relational.version>2.0.0</objectos.comuns.relational.version>
 		<mysql.connector.version>5.1.6</mysql.connector.version>
 	</properties>
