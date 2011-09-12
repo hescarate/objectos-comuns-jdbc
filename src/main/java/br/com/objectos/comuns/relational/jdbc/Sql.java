@@ -30,4 +30,6 @@ public interface Sql extends HasSQLFunctions {
 
   <T> List<T> list(ResultSetLoader<T> loader);
 
+  <T> T single(ResultSetLoader<T> loader);
+
 }

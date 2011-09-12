@@ -29,4 +29,6 @@ interface JdbcSQLBuilderExec {
 
   <T> List<T> list(ResultSetLoader<T> loader, SQLBuilder sql);
 
+  <T> T single(ResultSetLoader<T> loader, SQLBuilder sql);
+
 }

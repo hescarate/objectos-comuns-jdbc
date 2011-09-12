@@ -68,4 +68,30 @@ class JdbcSQLBuilderExecGuice implements JdbcSQLBuilderExec {
     return result;
   }
 
+  @Override
+  public <T> T single(ResultSetLoader<T> loader, SQLBuilder sql) {
+    T result = null;
+
+    Connection connection = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+
+    try {
+
+      connection = connections.get();
+      stmt = new JdbcConfigure(sql).prepare(connection);
+      rs = stmt.executeQuery();
+      result = rs.next() ? loader.load(rs) : null;
+
+    } catch (SQLException e) {
+      throw new SQLRuntimeException(e);
+    } finally {
+      Closer.close(connection);
+      Closer.close(stmt);
+      Closer.close(rs);
+    }
+
+    return result;
+  }
+
 }

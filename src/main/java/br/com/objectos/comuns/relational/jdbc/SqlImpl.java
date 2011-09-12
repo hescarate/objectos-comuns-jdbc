@@ -45,6 +45,11 @@ class SqlImpl implements Sql {
   }
 
   @Override
+  public <T> T single(ResultSetLoader<T> loader) {
+    return exec.single(loader, sql);
+  }
+
+  @Override
   public void clearOrders() {
     sql.clearOrders();
   }

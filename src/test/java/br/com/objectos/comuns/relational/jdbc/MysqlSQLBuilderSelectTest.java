@@ -116,10 +116,9 @@ public class MysqlSQLBuilderSelectTest {
     Sql sql = sqlProvider.get();
     sql.select("sum(ID)").from("COMUNS_RELATIONAL.SIMPLE");
 
-    List<Long> result = sql.list(new LongLoader());
+    Long result = sql.single(new LongLoader());
 
-    assertThat(result.size(), equalTo(1));
-    assertThat(result.get(0), equalTo(Long.valueOf(1 + 2 + 3)));
+    assertThat(result, equalTo(Long.valueOf(1 + 2 + 3)));
   }
 
 }
