@@ -15,37 +15,51 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.google.common.base.Objects;
+
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class MysqlWhereProperty extends AnsiWhereProperty {
+public class Duo {
 
-  public MysqlWhereProperty(String property) {
-    super('`' + property + '`');
+  private Integer id;
+
+  private final String a;
+  private final String b;
+
+  public Duo(String a, String b) {
+    this.a = a;
+    this.b = b;
+  }
+
+  public Duo(ResultSet rs) throws SQLException {
+    this.id = rs.getInt("ID");
+    this.a = rs.getString("TYPE");
+    this.b = rs.getString("KEY");
+  }
+
+  public Integer getId() {
+    return id;
+  }
+
+  public String getA() {
+    return a;
+  }
+
+  public String getB() {
+    return b;
   }
 
   @Override
-  public void like(String value) {
-    this.value = value;
-    if (isSet(value)) {
-      where = String.format("%s like concat('%%', ?, '%%')", property);
-    }
-  }
-
-  @Override
-  public void endsWith(String value) {
-    this.value = value;
-    if (isSet(value)) {
-      where = String.format("%s like concat('%%', ?)", property);
-    }
-  }
-
-  @Override
-  public void startsWith(String value) {
-    this.value = value;
-    if (isSet(value)) {
-      where = String.format("%s like concat(?, '%%')", property);
-    }
+  public String toString() {
+    return Objects.toStringHelper(this) //
+        .add("id", id) //
+        .add("a", a) //
+        .add("b", b) //
+        .toString();
   }
 
 }

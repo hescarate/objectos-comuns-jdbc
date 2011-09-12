@@ -84,7 +84,7 @@ class JdbcConfigure {
     Collection<String> where = getStrings(Where.class);
     if (!where.isEmpty()) {
       sql.append("where ");
-      String _where = Joiner.on("and " + New.Line).join(where);
+      String _where = Joiner.on(" and " + New.Line).join(where);
       sql.append(_where);
       sql.append(" " + New.Line);
     }
