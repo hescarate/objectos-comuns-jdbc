@@ -18,7 +18,6 @@ package br.com.objectos.comuns.relational.jdbc;
 import java.sql.SQLException;
 import java.util.Iterator;
 
-import br.com.objectos.comuns.relational.RelationalException;
 import br.com.objectos.comuns.relational.jdbc.Transactions.AtomicInsertOperation;
 
 import com.google.common.base.Function;
@@ -87,7 +86,8 @@ class AtomicInsertJdbc implements AtomicInsert {
     try {
       transactions.execute(operation);
     } catch (TransactionRolledbackException e) {
-      throw new RelationalException("Could not insert entity(ies). More info below.", e);
+      throw new InsertOperationException("Could not insert one or more entities. "
+          + "More info below.", e);
     }
   }
 
