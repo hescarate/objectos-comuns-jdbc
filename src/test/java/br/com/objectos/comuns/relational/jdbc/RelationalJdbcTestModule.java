@@ -17,6 +17,7 @@ package br.com.objectos.comuns.relational.jdbc;
 
 import br.com.objectos.comuns.sql.PropertiesJdbcCredentialsProvider;
 import br.com.objectos.comuns.testing.dbunit.DbunitModuleBuilder;
+import br.com.objectos.comuns.testing.dbunit.DefaultDataSupplierSet;
 
 import com.google.inject.AbstractModule;
 
@@ -39,6 +40,8 @@ public class RelationalJdbcTestModule extends AbstractModule {
         .withC3P0(credentials) //
         .withMysql() //
         .build());
+
+    bind(DefaultDataSupplierSet.class).to(RelationalJdbcDefaultSet.class);
   }
 
 }

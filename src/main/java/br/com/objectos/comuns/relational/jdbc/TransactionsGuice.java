@@ -45,8 +45,6 @@ class TransactionsGuice implements Transactions {
 
       conn = connections.get();
       conn.setAutoCommit(false);
-      // no dirty reads
-      conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
       Savepoint savepoint = conn.setSavepoint();
 
       Insertion insertion = new InsertionImpl(conn);
