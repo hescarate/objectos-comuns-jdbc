@@ -15,24 +15,16 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import br.com.objectos.comuns.relational.BatchInsert;
+import java.sql.SQLException;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
+import net.jcip.annotations.NotThreadSafe;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class RelationalJdbcBaseModule extends AbstractModule {
+@NotThreadSafe
+public interface Insertion {
 
-  @Override
-  protected void configure() {
-    bind(AtomicInsert.class).to(AtomicInsertJdbc.class).in(Scopes.SINGLETON);
-    bind(BatchInsert.class).to(AtomicInsertJdbc.class).in(Scopes.SINGLETON);
-
-    bind(JdbcSQLBuilderExec.class).to(JdbcSQLBuilderExecGuice.class);
-
-    bind(Sql.class).toProvider(SqlProvider.class);
-  }
+  void of(Insertable entity) throws SQLException;
 
 }

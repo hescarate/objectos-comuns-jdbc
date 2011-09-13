@@ -16,23 +16,13 @@
 package br.com.objectos.comuns.relational.jdbc;
 
 import br.com.objectos.comuns.relational.BatchInsert;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
+import br.com.objectos.comuns.relational.jdbc.Transactions.AtomicInsertOperation;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class RelationalJdbcBaseModule extends AbstractModule {
+public interface AtomicInsert extends BatchInsert {
 
-  @Override
-  protected void configure() {
-    bind(AtomicInsert.class).to(AtomicInsertJdbc.class).in(Scopes.SINGLETON);
-    bind(BatchInsert.class).to(AtomicInsertJdbc.class).in(Scopes.SINGLETON);
-
-    bind(JdbcSQLBuilderExec.class).to(JdbcSQLBuilderExecGuice.class);
-
-    bind(Sql.class).toProvider(SqlProvider.class);
-  }
+  void of(AtomicInsertOperation operation);
 
 }

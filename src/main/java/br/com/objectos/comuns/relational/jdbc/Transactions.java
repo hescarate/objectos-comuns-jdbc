@@ -15,24 +15,20 @@
  */
 package br.com.objectos.comuns.relational.jdbc;
 
-import br.com.objectos.comuns.relational.BatchInsert;
+import java.sql.SQLException;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
+import com.google.inject.ImplementedBy;
 
 /**
  * @author marcio.endo@objectos.com.br (Marcio Endo)
  */
-class RelationalJdbcBaseModule extends AbstractModule {
+@ImplementedBy(TransactionsGuice.class)
+public interface Transactions {
 
-  @Override
-  protected void configure() {
-    bind(AtomicInsert.class).to(AtomicInsertJdbc.class).in(Scopes.SINGLETON);
-    bind(BatchInsert.class).to(AtomicInsertJdbc.class).in(Scopes.SINGLETON);
-
-    bind(JdbcSQLBuilderExec.class).to(JdbcSQLBuilderExecGuice.class);
-
-    bind(Sql.class).toProvider(SqlProvider.class);
+  interface AtomicInsertOperation {
+    void execute(Insertion insertion) throws SQLException;
   }
+
+  void execute(AtomicInsertOperation operation) throws TransactionRolledbackException;
 
 }
